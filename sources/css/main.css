@@ -1,0 +1,62 @@
+body {
+    overflow: hidden;
+    font-family: "Ubuntu sans", Arial, sans-serif;
+    font-size: 14px;
+    color: #ddd;
+    line-height: 1em;
+}
+
+#editor { 
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 200px;
+    right: 0;
+}
+
+#modules { 
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 199px;
+
+    font-size: 13px;
+
+    background: #2B241D;
+    border-right: 1px solid #666;
+}
+
+#modules ul {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+    list-style: none;
+    margin: 10px 0;
+    padding: 0;
+}
+
+#modules li {
+    list-style: none;
+    line-height: 2.0em;
+    padding: 0 20px;
+    background: #2B241D;
+    cursor: pointer;
+}
+
+#modules li:hover {
+    background: #494742; /* Old browsers */
+    background: -moz-linear-gradient(top, #494742 0%, #2B241D 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#494742), color-stop(100%,#2B241D)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #494742 0%,#2B241D 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #494742 0%,#2B241D 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #494742 0%,#2B241D 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #494742 0%,#2B241D 100%); /* W3C */
+
+}
