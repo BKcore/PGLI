@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div id="modules">
+<!--<div id="modules">
 <ul>
   <li>Façade.pmod</li>
   <li>Test.pmod</li>
@@ -24,13 +24,14 @@
 </div>
 <div id="editor">
 
-</div>
+</div>-->
 
 <div id="render">
- 	<canvas id="canvas"></canvas>
+ 	
 </div>
 	
 <script src="libs/jquery-1.8.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/kinetic.js" type="text/javascript" charset="utf-8"></script>
 <script src="libs/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="libs/gamecore/class.js" type="text/javascript" charset="utf-8"></script>
 <script src="libs/gamecore/gamecore.js" type="text/javascript" charset="utf-8"></script>
@@ -38,25 +39,28 @@
 <script src="libs/gamecore/pooled.js" type="text/javascript" charset="utf-8"></script>
 <script src="libs/gamecore/hashlist.js" type="text/javascript" charset="utf-8"></script>
 
+<script src="pgli/diagram/Diagram.js" type="text/javascript" charset="utf-8"></script>
+<script src="pgli/diagram/Node.js" type="text/javascript" charset="utf-8"></script>
 <script src="pgli/render/CanvasRenderer.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
-	var editor = ace.edit("editor");
+	/*var editor = ace.edit("editor");
 	editor.setFontSize("16px");
 	editor.setTheme("ace/theme/monokai");
-	editor.getSession().setMode("ace/mode/json");
+	editor.getSession().setMode("ace/mode/json");*/
 
 	$(document).ready(function() {
-	  $.ajax({
-		url : "files/facade.pmod",
-		dataType: "text",
-		success : function (data) {
-		  editor.getSession().setValue(data);
-		}
-	  });
+		/*$.ajax({
+			url : "files/facade.pmod",
+			dataType: "text",
+			success : function (data) {
+				editor.getSession().setValue(data);
+			}
+		});*/
 
-	  var renderer = new pgli.render.CanvasRenderer($('#canvas'), 200, 200);
-	  console.log(renderer);
+		window.diag = new pgli.diagram.Diagram("render", 800, 500);
+		window.diag.addNode(new pgli.diagram.Node({}, 100, 100));
+		
   }); 
 </script>
 

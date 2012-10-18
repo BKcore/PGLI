@@ -60,3 +60,9 @@ body {
     background: linear-gradient(to bottom, #494742 0%,#2B241D 100%); /* W3C */
 
 }
+
+#render
+{
+    position: absolute;
+    z-index: 9999999;
+}
