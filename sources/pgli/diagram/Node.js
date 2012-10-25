@@ -11,6 +11,8 @@ pgli.diagram.Node = gamecore.Base.extend('Node',
 	background: null,
 	name: null,
 	sockets: [],
+	width: 200,
+	height: 200,
 
 	init: function(module, x, y)
 	{
@@ -25,12 +27,34 @@ pgli.diagram.Node = gamecore.Base.extend('Node',
 		this.background = new Kinetic.Rect({
 			x: 0,
 			y: 0,
-			width: 200,
-			height: 300,
-			fill: "#111111",
+			width: this.width,
+			height: this.height,
+			fill: "#222",
+			stroke: "#111",
+			strokeWidth: 1,
+			shadow: {
+				color: "black",
+				blur: 6,
+				offset: [0, 0],
+				opacity: 0.5
+			},
 			cornerRadius: 5
 		});
 
+		this.name = new Kinetic.Text({
+			x: 5,
+			y: 5,
+			text: module.name,
+			fontSize: 13,
+			fontFamily: "Ubuntu Mono",
+			textFill: "#aaa"
+		});
+
+		this.shape.on('mousedown', function(){
+			this.moveToTop();
+		});
+
 		this.shape.add(this.background);
+		this.shape.add(this.name);
 	}
 });

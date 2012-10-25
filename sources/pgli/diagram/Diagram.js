@@ -11,6 +11,9 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 	width: 1024,
 	height: 768,
 
+	timer: null,
+	redrawDelay: 1000/30,
+
 	stage: null,
 	layers: {
 		background: null,
@@ -26,8 +29,9 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 	 * @param  HTMLElement domContainer [description]
 	 * @param  Integer width      [description]
 	 * @param  Integer height     [description]
+	 * @param  Integer autoRedraw If defined, sets redraw rate to given FPS
 	 */
-	init: function(domContainer, width, height)
+	init: function(domContainer, width, height, autoRedraw)
 	{
 		this.dom = domContainer;
 		this.width = width;
@@ -48,11 +52,35 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 			height: this.height,
 			fill: "#343530"
 		});
+
 		this.layers.background.add(this.background);
 
 		this.stage.add(this.layers.background);
 		this.stage.add(this.layers.nodes);
 		this.stage.add(this.layers.links);
+
+		// Stage drag hack to trigger only on background drag
+		var self = this;
+		this.background.on("mousedown", function(){
+			self.stage.setDraggable(true);
+			self.stage.on("dragmove", function(){
+				self.layers.background.setX(-this.getX());
+				self.layers.background.setY(-this.getY());
+			});
+			self.stage.on("dragend", function(){
+				this.off("dragend");
+				this.off("dragmove");
+				this.setDraggable(false);
+			});
+		});
+
+		if(autoRedraw != undefined && autoRedraw != false && autoRedraw > 0)
+		{
+			this.redrawDelay = 1000 / autoRedraw;
+			this.timer = new bkcore.Timer();
+			this.timer.start();
+			this.autoRedraw(true);
+		}
 	},
 
 	addNode: function(node)
@@ -65,6 +93,27 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 	linkNodes: function(node1, slot1, node2, slot2)
 	{
 		node1.link(node2, slot1, slot2);
+	},
+
+	draw: function()
+	{
+		this.layers.nodes.draw();
+	},
+
+	autoRedraw: function(keep)
+	{
+		var self = this;
+
+		if(this.timer.update() > this.redrawDelay)
+		{
+			this.timer.start();
+			this.draw();
+		}
+
+		if(keep)
+			requestAnimFrame(function(){
+				self.autoRedraw(true);
+			});
 	}
 
 });
