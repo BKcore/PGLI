@@ -32,6 +32,7 @@
 	
 <script src="libs/jquery-1.8.js" type="text/javascript" charset="utf-8"></script>
 <script src="libs/kinetic.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/bkcore/Timer.js" type="text/javascript" charset="utf-8"></script>
 <script src="libs/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="libs/gamecore/class.js" type="text/javascript" charset="utf-8"></script>
 <script src="libs/gamecore/gamecore.js" type="text/javascript" charset="utf-8"></script>
@@ -44,12 +45,86 @@
 <script src="pgli/render/CanvasRenderer.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
+/*pgli.Project = gamecore.Base.extend({
+
+},
+{
+	init: function("/files/facade.pmod")
+	{
+
+			{
+				layers: [
+					{
+						"use": "subparts/floor.pmod"
+					}
+				]
+			}
+	}
+	files: Hashtable({"/batiments/facade.mod":"facade.pmod"})
+	modules: Hashtable({"facade.pmod": {Module{code:string, object: JSON.parse}}})
+	name: "nom",
+	path: "/files/",
+	root: "facade.pmod",
+	diagram: new Diagram(),
+	updateDiagram: function()
+	{
+
+	}
+	render: function(canvasRenderer)
+	{
+		canvasRenderer.Render(modules, root, new Hashtable());
+	}
+})
+
+var toto = '{
+	"name": "Facade",
+	"desc": "Facade template example",
+
+	"width": 1000,
+	"height": 2000,
+
+	"unit": "cm",
+	"pixelratio": 0.5,
+
+	"origin": "bottom left",
+
+	"params" : {
+		"style": "urban",
+		"floorheight": 200,
+		"decaydensity": 10
+	},
+
+	"vars" : {
+		"nbfloors": "@height mod @floorheight"
+	},
+
+	"layers": [
+		{
+			"use": "wall.pmod",
+		},
+		{
+			"use": "decay.mod",
+			"repeat": "@i 0 < @decaydensity"
+		},
+		{
+			"use": "floor.pmod",
+			"repeat": "@i 0 < @nbfloors",
+
+			"height": "@floorheight",
+			"y": "@i * @floorheight" 
+		}
+	]
+}';*/
+
+</script>
+
+<script>
 	/*var editor = ace.edit("editor");
 	editor.setFontSize("16px");
 	editor.setTheme("ace/theme/monokai");
 	editor.getSession().setMode("ace/mode/json");*/
 
-	$(document).ready(function() {
+	$(function() {
 		/*$.ajax({
 			url : "files/facade.pmod",
 			dataType: "text",
@@ -58,9 +133,10 @@
 			}
 		});*/
 
-		window.diag = new pgli.diagram.Diagram("render", 800, 500);
-		window.diag.addNode(new pgli.diagram.Node({}, 100, 100));
-		
+		var diagram = new pgli.diagram.Diagram("render", 800, 500, 30);
+		diagram.addNode(new pgli.diagram.Node({name: "Façade"}, 100, 100));
+		diagram.addNode(new pgli.diagram.Node({name: "Floor"}, 200, 120));
+		window.diagram = diagram;
   }); 
 </script>
 
