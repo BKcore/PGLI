@@ -51,7 +51,7 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 		this.background = new Kinetic.Rect({
 			width: this.width,
 			height: this.height,
-			fill: "#3E4039"
+			fill: "#272822"
 		});
 
 		this.layers.background.add(this.background);

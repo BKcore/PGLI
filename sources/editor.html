@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<!--<div id="modules">
+<div id="modules">
 <ul>
   <li>Façade.pmod</li>
   <li>Test.pmod</li>
@@ -22,11 +22,14 @@
   <li>Test.pmod</li>
 </ul>
 </div>
+
 <div id="editor">
 
-</div>-->
+</div>
 
-<div id="render">
+<div id="editor-separator"></div>
+
+<div id="diagram">
  	
 </div>
 	
@@ -120,23 +123,24 @@ var toto = '{
 </script>
 
 <script>
-	/*var editor = ace.edit("editor");
+	var editor = ace.edit("editor");
 	editor.setFontSize("16px");
 	editor.setTheme("ace/theme/monokai");
-	editor.getSession().setMode("ace/mode/json");*/
+	editor.getSession().setMode("ace/mode/json");
 
 	$(function() {
-		/*$.ajax({
+		$.ajax({
 			url : "files/facade.pmod",
 			dataType: "text",
 			success : function (data) {
 				editor.getSession().setValue(data);
 			}
-		});*/
+		});
 
-		var diagram = new pgli.diagram.Diagram("render", 800, 500, 30);
-		diagram.addNode(new pgli.diagram.Node({name: "Façade", layers:["Floor"]}, 100, 100));
-		diagram.addNode(new pgli.diagram.Node({name: "Floor", layers: []}, 260, 160));
+		var diagDom = $("#diagram");
+		var diagram = new pgli.diagram.Diagram("diagram", diagDom.width(), diagDom.height(), 30);
+		diagram.addNode(new pgli.diagram.Node({name: "Façade", layers:["Floor"]}, 100, 50));
+		diagram.addNode(new pgli.diagram.Node({name: "Floor", layers: []}, 260, 110));
 		window.diagram = diagram;
   }); 
 </script>
