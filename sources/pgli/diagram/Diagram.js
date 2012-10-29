@@ -21,6 +21,7 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 		links: null
 	},
 	background: null,
+	links: null,
 
 	nodes: [],
 
@@ -50,10 +51,13 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 		this.background = new Kinetic.Rect({
 			width: this.width,
 			height: this.height,
-			fill: "#343530"
+			fill: "#3E4039"
 		});
 
 		this.layers.background.add(this.background);
+
+		this.links = new pgli.diagram.Links(this);
+		this.layers.links.add(this.links.shape);
 
 		this.stage.add(this.layers.background);
 		this.stage.add(this.layers.nodes);
@@ -90,14 +94,23 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 		this.layers.nodes.draw();
 	},
 
-	linkNodes: function(node1, slot1, node2, slot2)
+	getNode: function(nodeName)
 	{
-		node1.link(node2, slot1, slot2);
+		var i = 0;
+		while(i < this.nodes.length)
+		{
+			if(this.nodes[i].module.name == nodeName)
+				return this.nodes[i];
+			i++;
+		}
+
+		throw "Error in Diagram: Unable to find node["+nodeName+"]";
 	},
 
 	draw: function()
 	{
 		this.layers.nodes.draw();
+		this.layers.links.draw();
 	},
 
 	autoRedraw: function(keep)
