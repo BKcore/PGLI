@@ -96,8 +96,8 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 
 	getNode: function(nodeName)
 	{
-		var i = 0;
-		while(i < this.nodes.length)
+		var i = 0, len = this.nodes.length;
+		while(i < len)
 		{
 			if(this.nodes[i].module.name == nodeName)
 				return this.nodes[i];

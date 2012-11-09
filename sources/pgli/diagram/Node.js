@@ -58,7 +58,7 @@ pgli.diagram.Node = gamecore.Base.extend('Node',
 		this.layers = new Kinetic.Shape({
 			drawFunc: function(ctx){
 				ctx.beginPath();
-				for(var i=0; i<this.attrs.count; ++i)
+				for(var i=0, len = this.attrs.count; i < len; ++i)
 					ctx.arc(10, 10+i*static.layersHeight, static.slotRadius, 0, Math.PI*2, true); 
 				ctx.closePath();
 				this.fill(ctx);

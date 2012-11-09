@@ -21,10 +21,10 @@ pgli.diagram.Links = gamecore.Base.extend('Links',
 			drawFunc: function(ctx){
 				ctx.beginPath();
 				
-				for(var i = 0; i < self.diagram.nodes.length; i++)
+				for(var i = 0, len = self.diagram.nodes.length; i < len; i++)
 				{
 					var node = self.diagram.nodes[i];
-					for(var j = 0; j < node.module.layers.length; j++)
+					for(var j = 0, _len = node.module.layers.length; j < _len; j++)
 					{
 						var start = node.getLayerSlot(j);
 						var end = self.diagram.getNode(node.module.layers[j]).getSlot();
