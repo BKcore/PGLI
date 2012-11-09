@@ -22,10 +22,10 @@
 
 	"layers": [
 		{
-			"use": "wall.pmod",
+			"use": "wall.pmod"
 		},
 		{
-			"use": "decay.mod",
+			"use": "decay.pmod",
 			"repeat": "@i 0 < @decaydensity"
 		},
 		{

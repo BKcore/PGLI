@@ -17,7 +17,7 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 
 
 
-	parse: function(string)
+	parseExpression: function(string)
 	{
 		var self = this;
 
@@ -40,6 +40,19 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 
 	},
 
+	parseModule: function(string)
+	{
+		try
+		{
+			return JSON.parse(string);
+		}
+		catch(e)
+		{
+			console.warn("module syntax error : "+ string);
+			return {error:"unable to parse module"};
+		}
+	},
+
 	getVar: function(varName)
 	{
 		return 1;
@@ -47,7 +60,13 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 
 	execFunction: function(methodName)
 	{
-		return 2;
+		if(methodName == "rand")
+			return Math.random();
+		else
+			throw "Unsupported method : "+methodName;
+
+
+		
 	}
 },
 {
