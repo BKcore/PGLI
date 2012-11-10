@@ -9,8 +9,9 @@ pgli.Project = gamecore.Base.extend('Project',
 },
 
 {
-
+	appInstance: null,
 	modules: null,
+	activeModule: null,
 	files:null,
 	keys :[],
 	name: "default",
@@ -130,6 +131,21 @@ pgli.Project = gamecore.Base.extend('Project',
 	isEmpty: function()
 	{
 		return (this.keys.length <= 0);
+	},
+
+	setAppInstance: function(app)
+	{
+		this.appInstance = app;
+	},
+
+	getAppInstance: function()
+	{
+		return this.appInstance;
+	},
+
+	setActiveModule: function(key)
+	{
+		this.activeModule = key;
 	}
 
 	/*updateDiagram: function()

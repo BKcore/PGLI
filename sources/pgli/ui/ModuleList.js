@@ -14,6 +14,7 @@ pgli.ui.ModuleList = gamecore.Base.extend('ModuleList',
 	init: function(domContainer)
 	{
 		this.container = $('#'+domContainer);
+		this.container.on("click", "li", {object: this}, this.onModuleClick);
 	},
 
 	bindProject: function(project)
@@ -33,7 +34,11 @@ pgli.ui.ModuleList = gamecore.Base.extend('ModuleList',
 			modules += static.tplModuleItem.replace("$path", key).replace("$name", key);
 		}
 		this.container.html(static.tplModuleList.replace("$list", modules));
-		console.log(this.container, static.tplModuleList.replace("$list", modules));
+	},
+
+	onModuleClick: function(event)
+	{
+		event.data.object.project.getAppInstance().showInEditor($(this).attr("data-path"));
 	}
 
 });

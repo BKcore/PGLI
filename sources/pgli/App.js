@@ -28,6 +28,7 @@ pgli.App = gamecore.Base.extend("App",
 	bindProject: function(project)
 	{
 		this.project = project;
+		this.project.setAppInstance(this);
 		this.moduleList.bindProject(project);
 		this.draw();
 	},
@@ -35,6 +36,12 @@ pgli.App = gamecore.Base.extend("App",
 	draw: function()
 	{
 		this.moduleList != undefined && this.moduleList.draw();
+	},
+
+	showInEditor: function(module)
+	{
+		this.project.setActiveModule(module);
+		this.editor.getSession().setValue(this.project.files.get(module));
 	}
 
 });
