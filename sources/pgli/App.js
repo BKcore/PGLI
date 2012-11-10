@@ -13,7 +13,7 @@ pgli.App = gamecore.Base.extend("App",
 
 	init: function(domDiagram, domModuleList, domEditor)
 	{
-		this.moduleList = new pgli.ui.ModuleList(domDiagram);
+		this.moduleList = new pgli.ui.ModuleList(domModuleList);
 
 		this.editor = ace.edit(domEditor);
 		this.editor.setFontSize("16px");
@@ -28,12 +28,13 @@ pgli.App = gamecore.Base.extend("App",
 	bindProject: function(project)
 	{
 		this.project = project;
-		this.redraw();
+		this.moduleList.bindProject(project);
+		this.draw();
 	},
 
-	redraw: function()
+	draw: function()
 	{
-		this.moduleList != undefined && this.moduleList.redraw();
+		this.moduleList != undefined && this.moduleList.draw();
 	}
 
 });

@@ -13,16 +13,15 @@ pgli.ui.ModuleList = gamecore.Base.extend('ModuleList',
 
 	init: function(domContainer)
 	{
-		this.container = $(domContainer);
+		this.container = $('#'+domContainer);
 	},
 
 	bindProject: function(project)
 	{
 		this.project = project;
-		this.redraw();
 	},
 
-	redraw: function()
+	draw: function()
 	{
 		var static = pgli.ui.ModuleList;
 		var modules = "";
@@ -33,8 +32,8 @@ pgli.ui.ModuleList = gamecore.Base.extend('ModuleList',
 			module = this.project.getModule(key);
 			modules += static.tplModuleItem.replace("$path", key).replace("$name", key);
 		}
-
 		this.container.html(static.tplModuleList.replace("$list", modules));
+		console.log(this.container, static.tplModuleList.replace("$list", modules));
 	}
 
 });

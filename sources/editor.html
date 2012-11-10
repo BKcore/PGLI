@@ -12,15 +12,7 @@
 <body>
 
 <div id="modules">
-<ul>
-  <li>Façade.pmod</li>
-  <li>Test.pmod</li>
-  <li>Test.pmod</li>
-  <li>Test.pmod</li>
-  <li>Test.pmod</li>
-  <li>Test.pmod</li>
-  <li>Test.pmod</li>
-</ul>
+
 </div>
 
 <div id="editor">
@@ -44,6 +36,8 @@
 <script src="libs/gamecore/hashlist.js" type="text/javascript" charset="utf-8"></script>
 
 <script src="pgli/App.js" type="text/javascript" charset="utf-8"></script>
+<script src="pgli/Project.js" type="text/javascript" charset="utf-8"></script>
+<script src="pgli/lang/Parser.js" type="text/javascript" charset="utf-8"></script>
 <script src="pgli/ui/ModuleList.js" type="text/javascript" charset="utf-8"></script>
 <script src="pgli/diagram/Diagram.js" type="text/javascript" charset="utf-8"></script>
 <script src="pgli/diagram/Links.js" type="text/javascript" charset="utf-8"></script>
@@ -62,6 +56,7 @@
 		});*/
 
 		var app = new pgli.App("diagram", "modules", "editor");
+		app.bindProject(new pgli.Project("files/facade.pmod", function(){ app.draw(); }));
 		window.app = app;
   }); 
 </script>

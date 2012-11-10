@@ -17,13 +17,14 @@ pgli.Project = gamecore.Base.extend('Project',
 	path: "/files/",
 	root: "default.pmod",
 	diagram: null,
-	loadingQueue : [],
+	loadingQueue: [],
+	onLoad: function() { console.log("Project loaded."); },
 
 	
 
-	init : function(projectFile)
+	init : function(projectFile, onLoad)
 	{
-		
+		this.onLoad = onLoad;		
 		this.modules = new gamecore.Hashtable();
 		this.files = new gamecore.Hashtable();
 		this.path = pgli.Project.patternPath.exec(projectFile)[1];
@@ -54,20 +55,20 @@ pgli.Project = gamecore.Base.extend('Project',
 	loadFile: function(path, callback)
 	{
 		var self = this;
-		$.ajax({
+		var request = $.ajax({
 	            url: path,
 	            type: 'get',
 	            dataType: "text",
-	            
-	    })
-	    .success(function(data)
-	    {
-	        callback.call(self,data);
-	    })
-	    .error(function()
-	    {
-	        throw "Unable to load file: " + path;
-	    });
+		    })
+		    .success(function(data)
+		    {
+		        callback.call(self,data);
+		        self.onLoad();
+		    })
+		    .error(function()
+		    {
+		        throw "Unable to load file: " + path;
+		    });
 	},
 
 	loadDependencies: function(object)
@@ -108,7 +109,7 @@ pgli.Project = gamecore.Base.extend('Project',
 
 	getModulesCount: function()
 	{
-		return this.keys.length();
+		return this.keys.length;
 	},
 
 	getModule: function(key)
@@ -124,6 +125,11 @@ pgli.Project = gamecore.Base.extend('Project',
 	getModuleKey: function(index)
 	{
 		return this.keys[index];
+	},
+
+	isEmpty: function()
+	{
+		return (this.keys.length <= 0);
 	}
 
 	/*updateDiagram: function()
