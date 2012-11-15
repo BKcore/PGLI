@@ -37,6 +37,9 @@ pgli.App = gamecore.Base.extend("App",
 
 		$(window).on('resize', function(){ self.resize.call(self); });
 		$(document).bind('keydown', function(e){ self.onKeyDown.call(self,e); });
+		//$('#modules').on('drop', function(e) {self.onDropEvent.call(self,e);});
+		window.addEventListener("drop",function(e){self.onDropEvent.call(self,e);}) ;
+		 
 	},
 
 	bindProject: function(project)
@@ -77,11 +80,11 @@ pgli.App = gamecore.Base.extend("App",
 
 	onKeyDown:function (e)
 	{
-		console.log(e.keyCode);
 			if(e.keyCode==117)
 			{
-				console.log("touche F6");
 				this.updateDiagram();
+				e.preventDefault();
+				return false;
 			}	
 	},
 
@@ -100,6 +103,22 @@ pgli.App = gamecore.Base.extend("App",
 		}
 
 		this.diagram.draw();
+	},
+
+	onDropEvent: function(e)
+	{
+		e.preventDefault();
+		return false;
+		console.log("dropev");
+		var length = e.dataTransfer.files.length;
+		for (var i = 0; i < length; i++) 
+		{
+			var file = e.dataTransfer.files[i];
+
+		}
+		
+		
+
 	}
 
 
