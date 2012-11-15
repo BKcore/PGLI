@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Editor</title>
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/editor.css">
+  <link rel="stylesheet" type="text/css" href="fonts/ubuntu-mono/font.css">
+  </style>
+</head>
+<body>
+
+<div id="panel-left">
+	<div id="modules"></div>
+	<div id="left-separator"></div>
+</div>
+
+<div id="panel-center">
+	<div id="editor"></div>
+	<div id="editor-separator"></div>
+	<div id="diagram"></div>
+</div>
+
+<div id="panel-right">
+	<div id="right-separator"></div>
+	<div id="preview"></div>
+</div>
+	
+<script src="libs/jquery-1.8.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/kinetic.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/bkcore/Timer.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/gamecore/class.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/gamecore/gamecore.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/gamecore/jhashtable.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/gamecore/pooled.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/gamecore/hashlist.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="pgli/App.js" type="text/javascript" charset="utf-8"></script>
+<script src="pgli/Project.js" type="text/javascript" charset="utf-8"></script>
+<script src="pgli/lang/Parser.js" type="text/javascript" charset="utf-8"></script>
+<script src="pgli/ui/ModuleList.js" type="text/javascript" charset="utf-8"></script>
+<script src="pgli/diagram/Diagram.js" type="text/javascript" charset="utf-8"></script>
+<script src="pgli/diagram/Links.js" type="text/javascript" charset="utf-8"></script>
+<script src="pgli/diagram/Node.js" type="text/javascript" charset="utf-8"></script>
+<script src="pgli/render/CanvasRenderer.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+
+	$(function() {
+		/*$.ajax({
+			url : "files/facade.pmod",
+			dataType: "text",
+			success : function (data) {
+				editor.getSession().setValue(data);
+			}
+		});*/
+
+		var app = new pgli.App("diagram", "modules", "editor", "preview");
+		app.bindProject(new pgli.Project("files/facade.pmod", function(){ app.draw(); }));
+		window.app = app;
+  }); 
+</script>
+
+</body>
+</html>
