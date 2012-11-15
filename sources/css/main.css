@@ -4,6 +4,41 @@ body {
     font-size: 14px;
     color: #ddd;
     line-height: 1em;
+    background: #1e1e1e;
+}
+
+#panel-center {
+    margin: 0;
+    position: absolute;
+    z-index: 20;
+    top: 0;
+    bottom: 0;
+    left: 200px;
+    right: 400px;
+}
+
+#panel-left {
+    margin: 0;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+
+    background: #191919;
+}
+
+#panel-right {
+    margin: 0;
+    position: absolute;
+    z-index: 30;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 400px;
+
+    background: #191919;
 }
 
 #editor { 
@@ -11,20 +46,9 @@ body {
     position: absolute;
     top: 0;
     bottom: 50%;
-    left: 200px;
+    left: 0;
     right: 0;
     z-index: 100;
-}
-
-#editor-separator {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 200px;
-    right: 0;
-    height: 3px;
-    z-index: 300;
-    background: #191919;
 }
 
 #diagram { 
@@ -32,9 +56,58 @@ body {
     position: absolute;
     bottom: 0;
     top: 50%;
-    left: 200px;
+    left: 0;
     right: 0;
     z-index: 200;
+}
+
+#editor-separator {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 300;
+    background: #191919;
+}
+
+#left-separator {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 3px;
+    z-index: 300;
+    background: #191919;
+}
+
+#right-separator {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    z-index: 300;
+    background: #191919;
+}
+
+#preview {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 3px;
+    width: 396px;
+
+    background: #1e1e1e;    
+    border-left: 1px solid #292929;
+}
+
+#preview canvas {
+    background: #161616;
 }
 
 #modules { 
@@ -43,12 +116,12 @@ body {
     top: 0;
     bottom: 0;
     left: 0;
-    width: 199px;
+    width: 196px;
 
     font-size: 13px;
 
     background: #1e1e1e;
-    border-right: 1px solid #191919;
+    border-right: 1px solid #292929;
 }
 
 #modules ul {

@@ -11,18 +11,20 @@
 </head>
 <body>
 
-<div id="modules">
-
+<div id="panel-left">
+	<div id="modules"></div>
+	<div id="left-separator"></div>
 </div>
 
-<div id="editor">
-
+<div id="panel-center">
+	<div id="editor"></div>
+	<div id="editor-separator"></div>
+	<div id="diagram"></div>
 </div>
 
-<div id="editor-separator"></div>
-
-<div id="diagram">
- 	
+<div id="panel-right">
+	<div id="right-separator"></div>
+	<div id="preview"></div>
 </div>
 	
 <script src="libs/jquery-1.8.js" type="text/javascript" charset="utf-8"></script>
@@ -55,7 +57,7 @@
 			}
 		});*/
 
-		var app = new pgli.App("diagram", "modules", "editor");
+		var app = new pgli.App("diagram", "modules", "editor", "preview");
 		app.bindProject(new pgli.Project("files/facade.pmod", function(){ app.draw(); }));
 		window.app = app;
   }); 

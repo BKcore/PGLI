@@ -8,6 +8,7 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 { // instance
 
 	dom: null,
+	container: null,
 	width: 1024,
 	height: 768,
 
@@ -34,11 +35,14 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 	 * @param  Integer height     [description]
 	 * @param  Integer autoRedraw If defined, sets redraw rate to given FPS
 	 */
-	init: function(domContainer, width, height, autoRedraw)
+	init: function(domContainer, autoRedraw)
 	{
+		var self = this;
+
 		this.dom = domContainer;
-		this.width = width;
-		this.height = height;
+		this.container = $('#'+domContainer);
+		this.width = this.container.width();
+		this.height = this.container.height();
 
 		this.stage = new Kinetic.Stage({
 			container: this.dom,
@@ -111,6 +115,7 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 
 	draw: function()
 	{
+		this.layers.background.draw();
 		this.layers.nodes.draw();
 		this.layers.links.draw();
 	},
@@ -129,6 +134,15 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 			requestAnimFrame(function(){
 				self.autoRedraw(true);
 			});
+	},
+
+	resize: function()
+	{
+		this.width = this.container.width();
+		this.height = this.container.height();
+		this.stage.setSize(this.width, this.height);
+		this.background.setSize(this.width, this.height);
+		this.draw();
 	}
 
 });

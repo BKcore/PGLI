@@ -6,3 +6,11 @@
 	-ms-user-select: none;
 	user-select: none;
 }
+
+.ace_sb {
+	overflow-y: hidden !important;
+}
+
+#editor {
+	background: #272822;
+}
