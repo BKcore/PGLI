@@ -11,7 +11,7 @@ pgli.Project = gamecore.Base.extend('Project',
 {
 	appInstance: null,
 	modules: null,
-	activeModule: null,
+	activeFile: null,
 	files:null,
 	keys :[],
 	name: "default",
@@ -42,6 +42,8 @@ pgli.Project = gamecore.Base.extend('Project',
 
     		var object = pgli.lang.Parser.parseModule(data);
     		self.modules.put(self.root, object);
+
+			self.getAppInstance().addDiagramNode(self.root, object);
 
 	    	self.name = object.name;
 
@@ -99,6 +101,7 @@ pgli.Project = gamecore.Base.extend('Project',
 		    		var object = pgli.lang.Parser.parseModule(data);
 		    		self.modules.put(name, object);
 
+		    		self.getAppInstance().addDiagramNode(name, object);
 
 		    		self.loadDependencies(object);
 
@@ -143,10 +146,17 @@ pgli.Project = gamecore.Base.extend('Project',
 		return this.appInstance;
 	},
 
-	setActiveModule: function(key)
+	setActiveFile: function(key)
 	{
-		this.activeModule = key;
-	}
+		this.activeFile = key;
+	},
+
+	rememberActiveFile: function()
+	{
+		if(!this.activeFile) return;
+
+		this.files.put(this.activeFile, this.getAppInstance().getEditorContent());
+	} 
 
 	/*updateDiagram: function()
 	{

@@ -10,6 +10,7 @@ pgli.App = gamecore.Base.extend("App",
 	moduleList: null,
 	editor: null,
 	diagram: null,
+	nodeCount: 0,
 
 	init: function(domDiagram, domModuleList, domEditor)
 	{
@@ -21,12 +22,11 @@ pgli.App = gamecore.Base.extend("App",
 		this.editor.getSession().setMode("ace/mode/json");
 
 		this.diagram = new pgli.diagram.Diagram(domDiagram, $('#'+domDiagram).width(), $('#'+domDiagram).height(), 30);
-		this.diagram.addNode(new pgli.diagram.Node({name: "Façade", layers:["Floor"]}, 100, 50));
-		this.diagram.addNode(new pgli.diagram.Node({name: "Floor", layers: []}, 260, 110));
 	},
 
 	bindProject: function(project)
 	{
+		this.nodeCount = 0;
 		this.project = project;
 		this.project.setAppInstance(this);
 		this.moduleList.bindProject(project);
@@ -40,8 +40,18 @@ pgli.App = gamecore.Base.extend("App",
 
 	showInEditor: function(module)
 	{
-		this.project.setActiveModule(module);
+		this.project.setActiveFile(module);
 		this.editor.getSession().setValue(this.project.files.get(module));
+	},
+
+	getEditorContent: function()
+	{
+		return this.editor.getSession().getValue();
+	},
+
+	addDiagramNode: function(key, module)
+	{
+		this.diagram.addNode(new pgli.diagram.Node(key, module, 50 + 160 * this.nodeCount++, 50));
 	}
 
 });

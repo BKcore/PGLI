@@ -38,6 +38,7 @@ pgli.ui.ModuleList = gamecore.Base.extend('ModuleList',
 
 	onModuleClick: function(event)
 	{
+		event.data.object.project.rememberActiveFile();
 		event.data.object.project.getAppInstance().showInEditor($(this).attr("data-path"));
 	}
 

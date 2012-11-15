@@ -24,10 +24,17 @@ pgli.diagram.Links = gamecore.Base.extend('Links',
 				for(var i = 0, len = self.diagram.nodes.length; i < len; i++)
 				{
 					var node = self.diagram.nodes[i];
+
+					if(! ("layers" in node.module)) continue;
+
 					for(var j = 0, _len = node.module.layers.length; j < _len; j++)
 					{
+						if(! ("use" in node.module.layers[j])) continue;
+
 						var start = node.getLayerSlot(j);
-						var end = self.diagram.getNode(node.module.layers[j]).getSlot();
+						var tNode = self.diagram.getNode(node.module.layers[j].use);
+						if(!tNode) continue;
+						var end = tNode.getSlot();
 
 						ctx.moveTo(start[0], start[1]);
 						ctx.bezierCurveTo(

@@ -23,6 +23,8 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 	background: null,
 	links: null,
 
+	project: null,
+
 	nodes: [],
 
 	/**
@@ -94,17 +96,17 @@ pgli.diagram.Diagram = gamecore.Base.extend('Diagram',
 		this.layers.nodes.draw();
 	},
 
-	getNode: function(nodeName)
+	getNode: function(nodeKey)
 	{
 		var i = 0, len = this.nodes.length;
 		while(i < len)
 		{
-			if(this.nodes[i].module.name == nodeName)
+			if(this.nodes[i].key == nodeKey)
 				return this.nodes[i];
 			i++;
 		}
-
-		throw "Error in Diagram: Unable to find node["+nodeName+"]";
+		console.warn("Error in Diagram: Unable to find node["+nodeKey+"]");
+		return false;
 	},
 
 	draw: function()

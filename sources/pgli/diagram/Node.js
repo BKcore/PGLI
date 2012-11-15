@@ -13,6 +13,8 @@ pgli.diagram.Node = gamecore.Base.extend('Node',
 { // instance
 	module: null,
 
+	key: null,
+
 	shape: null,
 	background: null,
 	name: null,
@@ -24,10 +26,11 @@ pgli.diagram.Node = gamecore.Base.extend('Node',
 	width: 150,
 	height: 200,
 
-	init: function(module, x, y)
+	init: function(key, module, x, y)
 	{
 		var static = pgli.diagram.Node;
 
+		this.key = key;
 		this.module = module;
 
 		this.shape = new Kinetic.Group({
