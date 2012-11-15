@@ -40,6 +40,8 @@ pgli.ui.ModuleList = gamecore.Base.extend('ModuleList',
 	{
 		event.data.object.project.rememberActiveFile();
 		event.data.object.project.getAppInstance().showInEditor($(this).attr("data-path"));
+		event.data.object.container.find('li').removeClass('active');
+		$(this).addClass('active');
 	}
 
 });

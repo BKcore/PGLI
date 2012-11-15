@@ -2,12 +2,17 @@
 	"name": "Wall",
 	"desc": "Wall template example",
 
-	"width": 1000,
-	"height": 2000,
+	"vars": {
+		"random": "#random(10)"
+	},
 
-	"origin": "bottom left",
-
-	"params" : {
-		"style": "urban"
+	"fill": {
+		"type": "image",
+		"url": "@resources/walls/@style/@random.jpg",
+		"repeat": "xy",
+		"x": 0,
+		"y": 0,
+		"width": "100%",
+		"height": "100%"
 	}
 }

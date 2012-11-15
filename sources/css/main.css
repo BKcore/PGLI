@@ -156,6 +156,10 @@ body {
 
 }
 
+#modules li.active {
+    background: #292929;
+}
+
 #render
 {
     position: absolute;

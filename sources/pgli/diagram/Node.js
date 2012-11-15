@@ -6,6 +6,7 @@ pgli.diagram.Node = gamecore.Base.extend('Node',
 	layersWidth: 20,
 	layersMargin: 20,
 	layersHeight: 16,
+	headerHeight: 40,
 	slotX: 10,
 	slotY: 14,
 	slotRadius: 6
@@ -39,24 +40,25 @@ pgli.diagram.Node = gamecore.Base.extend('Node',
 			draggable: true
 		});
 
+		var layerCount = (module.layers != undefined ? module.layers.length : 0) + 1;
+
+		this.height = static.headerHeight + layerCount * static.layersHeight;
+
 		this.background = new Kinetic.Rect({
 			x: 0,
 			y: 0,
 			width: this.width,
 			height: this.height,
 			fill: "#222",
-			stroke: "#111",
-			strokeWidth: 1,
+			stroke: "#000",
+			strokeWidth: 0.5,
 			shadow: {
 				color: "black",
 				blur: 6,
 				offset: [0, 0],
 				opacity: 0.5
-			},
-			cornerRadius: 5
+			}
 		});
-
-		var layerCount = (module.layers != undefined ? module.layers.length : 0) + 1;
 
 		this.layers = new Kinetic.Shape({
 			drawFunc: function(ctx){
