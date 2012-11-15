@@ -15,6 +15,8 @@ pgli.App = gamecore.Base.extend("App",
 
 	init: function(domDiagram, domModuleList, domEditor, domPreview)
 	{
+		var self = this;
+
 		this.moduleList = new pgli.ui.ModuleList(domModuleList);
 
 		this.editor = ace.edit(domEditor);
@@ -32,7 +34,9 @@ pgli.App = gamecore.Base.extend("App",
 	bindEvents: function()
 	{
 		var self = this;
+
 		$(window).on('resize', function(){ self.resize.call(self); });
+		$(document).bind('keydown', function(e){ self.onKeyDown.call(self,e); });
 	},
 
 	bindProject: function(project)
@@ -69,6 +73,35 @@ pgli.App = gamecore.Base.extend("App",
 	{
 		this.diagram.resize();
 		this.preview.resize();
+	},
+
+	onKeyDown:function (e)
+	{
+		console.log(e.keyCode);
+			if(e.keyCode==117)
+			{
+				console.log("touche F6");
+				this.updateDiagram();
+			}	
+	},
+
+	updateDiagram:function()
+	{
+		this.project.rememberActiveFile();
+		
+		for(var i = 0, len = this.project.keys.length; i<len; i++)
+		{
+
+			var object = pgli.lang.Parser.parseModule(this.project.files.get(this.project.keys[i]));
+		    this.project.modules.put(this.project.keys[i], object);
+		    this.diagram.getNode(this.project.keys[i]).module = object;
+		    //this.getNode.updateModule()...
+
+		}
+
+		this.diagram.draw();
 	}
+
+
 
 });
