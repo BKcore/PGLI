@@ -12,8 +12,10 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	dom: null,
 	container: null,
 	canvas: null,
+	context: null,
 	width: 1024,
 	height: 768,
+	project: null,
 
 	/**
 	 * Bind a new renderer to given canvas
@@ -27,8 +29,6 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 		this.container = $('#'+this.dom);
 		this.canvas = document.createElement("Canvas");
 		this.container.append(this.canvas);
-
-		console.log(this.container, this.canvas);
 
 		this.resize();
 	},

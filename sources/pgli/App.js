@@ -35,10 +35,10 @@ pgli.App = gamecore.Base.extend("App",
 	{
 		var self = this;
 
-		$(window).on('resize', function(){ self.resize.call(self); });
-		$(document).bind('keydown', function(e){ self.onKeyDown.call(self,e); });
-		//$('#modules').on('drop', function(e) {self.onDropEvent.call(self,e);});
-		window.addEventListener("drop",function(e){self.onDropEvent.call(self,e);}) ;
+		$(window).on('resize', function(){ return self.resize.call(self); });
+		$(document).bind('keydown', function(e){ return self.onKeyDown.call(self,e); });
+		$('#modules').on('drop', function(e) { return self.onDropEvent.call(self,e); });
+		//window.addEventListener("drop",function(e){ return self.onDropEvent.call(self,e); }) ;
 		 
 	},
 
@@ -48,6 +48,7 @@ pgli.App = gamecore.Base.extend("App",
 		this.project = project;
 		this.project.setAppInstance(this);
 		this.moduleList.bindProject(project);
+		this.preview.bindProject(project);
 		this.draw();
 	},
 
@@ -107,9 +108,9 @@ pgli.App = gamecore.Base.extend("App",
 
 	onDropEvent: function(e)
 	{
+		console.log("dropev");
 		e.preventDefault();
 		return false;
-		console.log("dropev");
 		var length = e.dataTransfer.files.length;
 		for (var i = 0; i < length; i++) 
 		{
