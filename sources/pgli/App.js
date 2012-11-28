@@ -55,6 +55,7 @@ pgli.App = gamecore.Base.extend("App",
 	draw: function()
 	{
 		this.moduleList != undefined && this.moduleList.draw();
+		this.preview.draw();
 	},
 
 	showInEditor: function(module)

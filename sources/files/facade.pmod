@@ -23,7 +23,7 @@
 
 	"layers": [
 		{
-			"use": "wall.pmod"
+			"use": "wall.pmod",
 		},
 		{
 			"use": "decay.pmod",
@@ -36,5 +36,10 @@
 			"height": "@floorheight",
 			"y": "@i * @floorheight" 
 		}
-	]
+	],
+
+	"fill": {
+		"type": "color",
+		"value": "#FF0000"
+	}
 }

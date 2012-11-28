@@ -131,6 +131,11 @@ pgli.Project = gamecore.Base.extend('Project',
 		return this.keys[index];
 	},
 
+	getRootModule: function()
+	{
+		return this.modules.get(this.root);
+	},
+
 	isEmpty: function()
 	{
 		return (this.keys.length <= 0);
