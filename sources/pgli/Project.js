@@ -33,29 +33,11 @@ pgli.Project = gamecore.Base.extend('Project',
 
 	    var self = this;
 
-    	this.loadFile(projectFile, function(data)
-    	{
-    		//ui.openFile(data);
-    		
-    		self.files.put(self.root, data);
-    		self.keys.push(self.root);
-
-    		var object = pgli.lang.Parser.parseModule(data);
-    		self.modules.put(self.root, object);
-
-			self.getAppInstance().addDiagramNode(self.root, object);
-
-	    	self.name = object.name;
-
-	    	this.loadDependencies(object);
-
-			//this.diagram = new pgli.diagram.Diagram();
-
-    	});
+    	this.loadFile(projectFile,this.root,true,true);
     		
 	},
 
-	loadFile: function(path, callback)
+	loadFile: function(path,name,doDependencies,doDiagram)
 	{
 		var self = this;
 		var request = $.ajax({
@@ -65,7 +47,19 @@ pgli.Project = gamecore.Base.extend('Project',
 		    })
 		    .success(function(data)
 		    {
-		        callback.call(self,data);
+		    	self.files.put(name, data);
+		    	self.keys.push(name);
+
+		    	var object = pgli.lang.Parser.parseModule(data);
+		    	self.modules.put(name, object);
+
+		    	if(doDependencies == true)
+		    		self.loadDependencies(object);
+
+		    	if(doDiagram == true)
+		    		self.getAppInstance().addDiagramNode(name, object);
+
+		  
 		        self.onLoad();
 		    })
 		    .error(function()
@@ -92,20 +86,8 @@ pgli.Project = gamecore.Base.extend('Project',
 
 	    	(function(name,self)
 	    	{
+		    	self.loadFile(self.path+name,name,true,true);
 
-		    	self.loadFile(self.path+name, function(data)
-		    	{
-		    		self.files.put(name, data);
-		    		self.keys.push(name);
-
-		    		var object = pgli.lang.Parser.parseModule(data);
-		    		self.modules.put(name, object);
-
-		    		self.getAppInstance().addDiagramNode(name, object);
-
-		    		self.loadDependencies(object);
-
-		    	});
 	    	})(layerName,self);
 		}
 

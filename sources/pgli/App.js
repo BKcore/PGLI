@@ -110,14 +110,22 @@ pgli.App = gamecore.Base.extend("App",
 	{
 		console.log("dropev");
 		e.preventDefault();
-		return false;
-		var length = e.dataTransfer.files.length;
+		var self = this;
+
+		var length = e.originalEvent.dataTransfer.files.length;
 		for (var i = 0; i < length; i++) 
 		{
-			var file = e.dataTransfer.files[i];
+			var file = e.originalEvent.dataTransfer.files[i];
+
+			fileName = file.name;
+			console.log(fileName)
+
+			this.project.loadFile(self.project.path+fileName,fileName,true,true);
 
 		}
-		
+
+		this.draw();
+		return false;
 		
 
 	}
