@@ -12,8 +12,8 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 	},
 
 
-	patternVar:/\@([a-z]+)/ig,
-	patternMethod: /\#([a-z]+)/ig,
+	patternVar:/\@(\w+)/g,
+	patternMethod: /\#(\w+)(\(([^\)]+)\))?/g,
 
 
 
@@ -27,9 +27,10 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 		});
 
 
-		string = string.replace(this.patternMethod,function(match,methodName)
+		string = string.replace(this.patternMethod,function(match,methodName,a,params)
 		{
-			return self.execFunction(methodName);
+			console.log(arguments);
+			return self.execFunction(methodName, params);
 		});
 
 		console.log(string);
@@ -58,15 +59,24 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 		return 1;
 	},
 
-	execFunction: function(methodName)
+	execFunction: function(methodName, params)
 	{
-		if(methodName == "rand")
-			return Math.random();
+		var hasP = params != undefined;
+		var p = hasP ? params.replace(" ", "").split(',') : [];
+
+		if(methodName == "random")
+		{
+			var r = Math.random();
+			if(hasP && p.length == 2)
+			{
+				var min = eval(p[0]);
+				var max = eval(p[1]);
+				r = Math.round(r * (max-min) + min);
+			}
+			return r;
+		}
 		else
 			throw "Unsupported method : "+methodName;
-
-
-		
 	}
 },
 {

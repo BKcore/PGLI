@@ -3,7 +3,7 @@
 	"desc": "Wall template example",
 
 	"vars": {
-		"random": "#random(10)"
+		"random": "#random(0,10)"
 	},
 
 	"fill": {

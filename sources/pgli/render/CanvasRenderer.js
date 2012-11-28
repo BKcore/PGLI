@@ -18,9 +18,12 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	project: null,
 	xform: [],
 	xseek: -1,
+	scope: [],
+	sseek: -1,
 	resources: {
 		images: []
 	},
+	variables: null,
 
 	/**
 	 * Bind a new renderer to given canvas
@@ -36,6 +39,8 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 		this.container.append(this.canvas);
 
 		this.resize();
+
+		this.variables = new gamecore.Hashtable();
 	},
 
 	draw: function()
@@ -45,6 +50,7 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 
 		var ratio = this.getRenderRatio();
 
+		this.sreset();
 		this.xreset(ratio, 0, 0, this.width, this.height);
 		console.log(this.xget());
 		this.walkModule(this.project.getRootModule());
@@ -54,7 +60,7 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	{
 		if(!module) return;
 
-		this.xpush();
+		
 		console.log("render: "+module.name);
 
 		if("fill" in module)
@@ -65,10 +71,13 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 			var layer = module.layers[i];
 			if("use" in layer)
 			{
+				this.xpush();
+				this.spush();
 				this.walkModule(this.project.getModule(layer.use));
+				this.spop();
+				this.xpop();
 			}
 		}
-		this.xpop();
 	},
 
 	actionFill: function(opts)
@@ -85,6 +94,29 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 			this.context.fillStyle = opts.value;
 			this.context.fill();
 		}
+	},
+
+	spush: function()
+	{
+		this.scope.push(this.cloneScope(this.sget()));
+		this.sseek++;
+	},
+
+	spop: function()
+	{
+		this.sseek--;
+		return this.scope.pop();
+	},
+
+	sreset: function()
+	{
+		this.scope = [];
+		this.sseek = -1;
+	},
+
+	sget: function()
+	{
+		return this.scope[this.sseek];
 	},
 
 	xpush: function(ratio, x, y, h, w)
@@ -144,6 +176,12 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	{
 		return this.xform[this.xseek][4];
 	},
+
+	cloneScope: (function()
+	{ 
+		return function (obj) { Clone.prototype=obj; return new Clone() };
+		function Clone(){}
+	}()),
 
 	bindProject: function(project)
 	{

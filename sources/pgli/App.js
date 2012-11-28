@@ -55,7 +55,7 @@ pgli.App = gamecore.Base.extend("App",
 	draw: function()
 	{
 		this.moduleList != undefined && this.moduleList.draw();
-		this.preview.draw();
+		//this.preview.draw();
 	},
 
 	showInEditor: function(module)
@@ -80,14 +80,20 @@ pgli.App = gamecore.Base.extend("App",
 		this.preview.resize();
 	},
 
-	onKeyDown:function (e)
+	onKeyDown: function(e)
 	{
-			if(e.keyCode==117)
-			{
-				this.updateDiagram();
-				e.preventDefault();
-				return false;
-			}	
+		if(e.keyCode==117)
+		{
+			this.updateDiagram();
+			e.preventDefault();
+			return false;
+		}
+		else if(e.keyCode==118)
+		{
+			this.preview.draw();
+			e.preventDefault();
+			return false;
+		}	
 	},
 
 	updateDiagram:function()
