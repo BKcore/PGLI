@@ -1,0 +1,47 @@
+
+<document> ::= "{" ({ <list> "," } <list> ) | [<list>] "}"
+	<list> ::= <attributeList> | <params> | <vars> | <layers> | <fill> 
+
+		<attributeList> ::=  { <attribute> "," }
+			<attribute> ::= <name> | <desc> | <width> | <height> | <unit> | <pixelRatio> | <origin>
+
+				<name> ::= '"name" : ' <string>
+				<desc> ::= '"desc" : ' <string>
+				<width> ::= '"width" : ' <int>
+				<height> ::= '"height" : '<int>
+				<unit> ::= '"unit" : ' "cm" | "m"
+				<pixelRatio> ::='"pixelRatio" : ' <float>
+				<origin> ::= '"origin" : ' "bottom left" | "top left" | "center"
+
+		<params> ::= '"params" : '"{" ({ <param> "," } <param> ) | [<param>] "}"
+			<param>::= <resources> | <style> | <floorHeight> | <decayDensity> 
+
+				<resources> ::= '"resources" : ' <string>
+				<style> ::= '"style" : ' "urban" | "other"
+				<floorHeight> ::= '"floorHeight" : '<int>
+				<decayDensity> ::= '"decayDensity" : '<int>
+
+		<vars> ::= '"vars" : '  "{" ({ <var> "," } <var> ) | [<var>] "}"
+			<var> ::= <nbFloors>
+
+				<nbFloors> ::= '"nbFloors" : '<expression>
+
+					<expression> ::= <> <operator> <>
+
+		<layers> ::= '"layers" : ' "[" ({ <layer> "," } <layer> ) | [<layer>] "]"
+
+			<layer> ::= "{" <use> ["," <repeat> ["," <other-param>]] "}"
+				
+				<use> ::= '"use" : '<string>
+				<repeat> ::= '"repeat" : ' <repeatExpr>
+					<repeatExpr> ::= 
+				<other-param> ::=
+
+
+		<fill> ::= '"fill" : '"{" <type> "," <value> "}"
+
+			<type> ::= '"type" : ' "color" | "texture"
+			<value> ::= '"value" : ' <string>
+
+
+<s> (separator)
