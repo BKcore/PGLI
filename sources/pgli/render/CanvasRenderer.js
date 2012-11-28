@@ -75,7 +75,8 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	{
 		if(opts.type == "image")
 		{
-			this.loadImage(opts.value);
+			//this.loadImage(opts.value);
+			//this.context.drawImage()
 		}
 		if(opts.type == "color")
 		{

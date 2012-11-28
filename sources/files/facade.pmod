@@ -23,7 +23,7 @@
 
 	"layers": [
 		{
-			"use": "wall.pmod",
+			"use": "wall.pmod"
 		},
 		{
 			"use": "decay.pmod",
