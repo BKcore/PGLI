@@ -4,7 +4,18 @@ pgli.render = pgli.render || {};
 pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 { // static
 
-
+	SCOPE_KEYWORDS: {
+		'use': 0,
+		'repeat': 1,
+		'comment': 2
+	},
+	SCOPE_XFORMS: {
+		'x': 1,
+		'y': 2,
+		'width': 3,
+		'height': 4,
+		'scale': 0
+	}
 
 },
 { // instance
@@ -60,8 +71,15 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	{
 		if(!module) return;
 
-		
+		var static = pgli.render.CanvasRenderer;
+
 		console.log("render: "+module.name);
+
+		if("params" in module) for(p in module.params)
+			this.sset(p, module.params[p]);
+
+		if("vars" in module)
+			this.actionVars(module.vars);
 
 		if("fill" in module)
 			this.actionFill(module.fill);
@@ -73,10 +91,37 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 			{
 				this.xpush();
 				this.spush();
+
+				var scope = this.sget();
+				for(k in layer)
+				{
+					if(k in static.SCOPE_KEYWORDS)
+						continue;
+					else if(k in static.SCOPE_XFORMS)
+						this.xset(static.SCOPE_XFORMS[k], pgli.lang.Parser.parseExpression(layer[k], scope));
+					else
+						this.sset(k, pgli.lang.Parser.parseExpression(layer[k], scope));
+				}
+
 				this.walkModule(this.project.getModule(layer.use));
+				
 				this.spop();
 				this.xpop();
 			}
+		}
+	},
+
+	actionVars: function(opts)
+	{
+		var static = pgli.render.CanvasRenderer;
+		var scope = this.sget();
+
+		for(k in opts)
+		{
+			if(k in static.SCOPE_KEYWORDS || k in static.SCOPE_XFORMS)
+				continue;
+			else
+				this.sset(k, pgli.lang.Parser.parseExpression(opts[k], scope));
 		}
 	},
 
@@ -84,15 +129,35 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	{
 		if(opts.type == "image")
 		{
-			//this.loadImage(opts.value);
-			//this.context.drawImage()
+			this.context.drawImage(
+				this.loadImage(
+					pgli.lang.Parser.parseExpression(opts.value, this.sget())
+				)
+				, this.xgetw(), this.xgeth()
+			);
 		}
 		if(opts.type == "color")
 		{
 			this.context.beginPath();
 			this.context.rect(this.xgetx(), this.xgety(), this.xgetw(), this.xgeth());
-			this.context.fillStyle = opts.value;
+			this.context.fillStyle = pgli.lang.Parser.parseExpression(opts.value);
 			this.context.fill();
+		}
+	},
+
+	loadImage: function(url)
+	{
+		if(url in this.resources.images)
+			return this.resources.images[url];
+		else
+		{
+			var img = new Image();
+			img.onLoad = function(){
+				//self.draw();
+			};
+			img.src = url;
+			this.resources.images[url] = img;
+			return img;
 		}
 	},
 
@@ -110,13 +175,18 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 
 	sreset: function()
 	{
-		this.scope = [];
-		this.sseek = -1;
+		this.scope = [{}];
+		this.sseek = 0;
 	},
 
 	sget: function()
 	{
 		return this.scope[this.sseek];
+	},
+
+	sset: function(key, value)
+	{
+		this.scope[this.sseek][key] = value;
 	},
 
 	xpush: function(ratio, x, y, h, w)
@@ -143,6 +213,11 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	xget: function()
 	{
 		return this.xform[this.xseek];
+	},
+
+	xset: function(key, value)
+	{
+		this.xform[this.xseek][key] = value;
 	},
 
 	xreset: function(ratio, x, y, h, w)

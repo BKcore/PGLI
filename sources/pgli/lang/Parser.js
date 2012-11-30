@@ -13,19 +13,25 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 
 
 	patternVar:/\@(\w+)/g,
-	patternMethod: /\#(\w+)(\(([^\)]+)\))?/g,
+	patternMethod: /\#(\w+)(\(([^\)]+)\))/g,
 
 
 
-	parseExpression: function(string)
+	parseExpression: function(string, scope)
 	{
 		var self = this;
+		var orig = string;
 
-		string = string.replace(this.patternVar,function(match,varName)
+		if(typeof(string) != "string")
+			return string;
+
+		if(scope != undefined)
 		{
-			return self.getVar(varName);
-		});
-
+			string = string.replace(this.patternVar,function(match,varName)
+			{
+				return varName in scope ? scope[varName] : 0;
+			});
+		}
 
 		string = string.replace(this.patternMethod,function(match,methodName,a,params)
 		{
@@ -33,10 +39,13 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 			return self.execFunction(methodName, params);
 		});
 
-		console.log(string);
+		console.log("#Parsed expr: '"+string+"' from '"+orig+"'");
 		
-
-		return eval(string);
+		try {
+			return eval(string);
+		} catch (e) {
+			return string;
+		}
 		
 
 	},
@@ -54,11 +63,6 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 		}
 	},
 
-	getVar: function(varName)
-	{
-		return 1;
-	},
-
 	execFunction: function(methodName, params)
 	{
 		var hasP = params != undefined;
@@ -67,11 +71,14 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 		if(methodName == "random")
 		{
 			var r = Math.random();
-			if(hasP && p.length == 2)
+			if(hasP && p.length == 2) try
 			{
 				var min = eval(p[0]);
 				var max = eval(p[1]);
 				r = Math.round(r * (max-min) + min);
+			} catch(e) {
+				console.warn('Bad method format: '+methodName+' / '+params);
+				return 0;
 			}
 			return r;
 		}

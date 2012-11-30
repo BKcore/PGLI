@@ -11,7 +11,7 @@
 	"origin": "bottom left",
 
 	"params" : {
-		"resources": "~/PGLI/resources/",
+		"resources": "~/PGLI/resources",
 		"style": "urban",
 		"floorheight": 200,
 		"decaydensity": 10
