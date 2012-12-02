@@ -24,7 +24,7 @@
 
 		<layers> ::= '"layers"' <attrsep> "[" <s> (({ <layer> <listsep> } <layer> ) | [<layer>]) <s> "]"
 
-			<layer> ::= "{" (({ <layerparam> <listsep> } <layerparam> ) | [<layerparam>]) "}"
+			<layer> ::= "{" <s> (({ <layerparam> <listsep> } <layerparam> ) | [<layerparam>]) <s> "}"
 				
 				<layerparam> ::= <layeruse> | <layerrepeat> | <var>
 
