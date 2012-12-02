@@ -1,47 +1,69 @@
 
-<document> ::= "{" ({ <list> "," } <list> ) | [<list>] "}"
-	<list> ::= <attributeList> | <params> | <vars> | <layers> | <fill> 
+<document> ::= "{" <s> (({ <docelement> <listsep> } <docelement>) | [<docelement>]) <s> "}"
+	
+	<docelement> ::= <attribute> | <params> | <vars> | <layers> | <fill> 
+			
+		<attribute> ::= <name> | <desc> | <width> | <height> | <origin>
 
-		<attributeList> ::=  { <attribute> "," }
-			<attribute> ::= <name> | <desc> | <width> | <height> | <unit> | <pixelRatio> | <origin>
+			<name> ::= '"name"' <attrsep> <string>
+			<desc> ::= '"desc"' <attrsep> <string>
+			<width> ::= '"width"' <attrsep> <int>
+			<height> ::= '"height"' <attrsep> <int>
+			<origin> ::= '"origin"' <attrsep> ("bottom left" | "top left" | "center" | "bottom right" | "top right" | "inherit")
 
-				<name> ::= '"name" : ' <string>
-				<desc> ::= '"desc" : ' <string>
-				<width> ::= '"width" : ' <int>
-				<height> ::= '"height" : '<int>
-				<unit> ::= '"unit" : ' "cm" | "m"
-				<pixelRatio> ::='"pixelRatio" : ' <float>
-				<origin> ::= '"origin" : ' "bottom left" | "top left" | "center"
 
-		<params> ::= '"params" : '"{" ({ <param> "," } <param> ) | [<param>] "}"
-			<param>::= <resources> | <style> | <floorHeight> | <decayDensity> 
+		<params> ::= '"params"' <attrsep> "{" <s> (({ <param> <listsep> } <param>) | [<param>]) <s> "}"
+			
+			<param>::= <string> <attrsep> (<string> | <number>)
 
-				<resources> ::= '"resources" : ' <string>
-				<style> ::= '"style" : ' "urban" | "other"
-				<floorHeight> ::= '"floorHeight" : '<int>
-				<decayDensity> ::= '"decayDensity" : '<int>
 
-		<vars> ::= '"vars" : '  "{" ({ <var> "," } <var> ) | [<var>] "}"
-			<var> ::= <nbFloors>
+		<vars> ::= '"vars"' <attrsep> "{" <s> (({ <var> <listsep> } <var> ) | [<var>]) <s> "}"
+			
+			<var> ::= <string> <attrsep> (<expression> | <number>)
 
-				<nbFloors> ::= '"nbFloors" : '<expression>
 
-					<expression> ::= <> <operator> <>
+		<layers> ::= '"layers"' <attrsep> "[" <s> (({ <layer> <listsep> } <layer> ) | [<layer>]) <s> "]"
 
-		<layers> ::= '"layers" : ' "[" ({ <layer> "," } <layer> ) | [<layer>] "]"
-
-			<layer> ::= "{" <use> ["," <repeat> ["," <other-param>]] "}"
+			<layer> ::= "{" (({ <layerparam> <listsep> } <layerparam> ) | [<layerparam>]) "}"
 				
-				<use> ::= '"use" : '<string>
-				<repeat> ::= '"repeat" : ' <repeatExpr>
-					<repeatExpr> ::= 
-				<other-param> ::=
+				<layerparam> ::= <layeruse> | <layerrepeat> | <var>
+
+					<layeruse> ::= '"use"' <attrsep> <pathexpr>
+
+					<layerrepeat> ::= '"repeat"' <attrsep> <repeatexpr>
+
+						<repeatexpr> ::= '"' <so> <exprvar> <so> <expritem> <so> <operatorrep> <so> <expritem> <so> '"'
 
 
-		<fill> ::= '"fill" : '"{" <type> "," <value> "}"
+		<fill> ::= '"fill"' <attrsep> "{" <s> <filltype> <listsep> <fillvalue> [<listsep> <fillrepeat>] <s> "}"
 
-			<type> ::= '"type" : ' "color" | "texture"
-			<value> ::= '"value" : ' <string>
+			<filltype> ::= '"type"' <attrsep> ("color" | "image")
+			<fillvalue> ::= '"value"' <attrsep> <string>
+			<fillrepeat> ::= '"repeat"' <attrsep> ('exact' | 'fit' | 'cover' | 'x' | 'y' | 'xy' )
 
 
-<s> (separator)
+<expression> ::= '"' (({ <expritem> <so> <operator> <so> } <expritem> ) | [<expritem>]) '"'
+	
+	<expritem> ::= <exprvar> | <exprfunc> | <number>
+
+		<exprvar> ::= '@' <word>
+		<exprfunc> ::= '#' <word> '(' (({ <exprfuncparam> <listsep> } <exprfuncparam>) | [<exprfuncparam>]) ')'
+
+			<exprfuncparam> ::= <exprvar> | <number>
+
+<pathexpr> ::= '"' (({ <pathexpritem> <pathsep> } <pathexpritem> ) | [<pathexpritem>]) '.pmod"'
+
+	<pathexpritem> ::= <word> | <exprvar> | <exprfunc> | '.' | '~' | <pathexpritem>
+	<pathsep> ::= '/' | '\\'
+
+
+<string> ::= '"' <word> '"'
+<number> ::= <int> | <float>
+<operator> ::= '+' | '-' | '*' | '/' | '%'
+<operatorrep> ::= '>' | '<' | '!=' | '<=' | '>='
+
+
+<s> ::= { ' ' | '\n' | '\r\n' | '\t' }
+<so> ::= { ' ' }
+<listsep> ::= <s> ',' <s>
+<attrsep> ::= <s> ':' <s>

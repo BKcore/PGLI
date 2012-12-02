@@ -14,11 +14,13 @@
 		"resources": "~/PGLI/resources",
 		"style": "urban",
 		"floorheight": 200,
-		"decaydensity": 10
+		"decaydensity": 10,
+		"width": 1000,
+		"height": 2000
 	},
 
 	"vars" : {
-		"nbfloors": "@height mod @floorheight"
+		"nbfloors": "#mod(@height, @floorheight)"
 	},
 
 	"layers": [

@@ -82,8 +82,24 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 			}
 			return r;
 		}
+		else if(methodName == "mod")
+		{
+			if(hasP && p.length == 2) try
+			{
+				var base = eval(p[0]);
+				var div = eval(p[1]);
+				if(div == 0) throw "Divide by 0";
+				return Math.floor(base/div);
+			} catch(e) {
+				console.warn('Bad method format: '+methodName+' / '+params);
+			}
+			return 0;
+		}
 		else
-			throw "Unsupported method : "+methodName;
+		{
+			console.warn("Unsupported method : "+methodName);
+			return 0;
+		}
 	}
 },
 {
