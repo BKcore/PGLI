@@ -1,47 +1,55 @@
 
-<document> ::= "{" ({ <list> "," } <list> ) | [<list>] "}"
+<document> ::= "{" [<s>] ({ <list> [<s>] "," [<s>]} <list> ) | [<list>] [<s>]"}"
 	<list> ::= <attributeList> | <params> | <vars> | <layers> | <fill> 
 
-		<attributeList> ::=  { <attribute> "," }
+		<attributeList> ::=  { <attribute> [<s>] "," [<s>] }
 			<attribute> ::= <name> | <desc> | <width> | <height> | <unit> | <pixelRatio> | <origin>
 
-				<name> ::= '"name" : ' <string>
-				<desc> ::= '"desc" : ' <string>
-				<width> ::= '"width" : ' <int>
-				<height> ::= '"height" : '<int>
-				<unit> ::= '"unit" : ' "cm" | "m"
-				<pixelRatio> ::='"pixelRatio" : ' <float>
-				<origin> ::= '"origin" : ' "bottom left" | "top left" | "center"
+				<name> ::= '"name"' [<s>] ":" [<s>]  <string>
+				<desc> ::= '"desc"' [<s>] ":" [<s>]  <string>
+				<width> ::= '"width"' [<s>] ":" [<s>] <int>
+				<height> ::= '"height"' [<s>] ":" [<s>] <int>
+				<unit> ::= '"unit"' [<s>] ":" [<s>]  "cm" | "m"
+				<pixelRatio> ::='"pixelRatio"' [<s>] ":" [<s>] <float>
+				<origin> ::= '"origin"' [<s>] ":" [<s>] "bottom left" | "top left" | "center"
 
-		<params> ::= '"params" : '"{" ({ <param> "," } <param> ) | [<param>] "}"
+		<params> ::= '"params"' [<s>] ":" [<s>] "{" [<s>] ({ <param>  [<s>] "," [<s>] } <param> ) | [<param>] [<s>]"}"
 			<param>::= <resources> | <style> | <floorHeight> | <decayDensity> 
 
-				<resources> ::= '"resources" : ' <string>
-				<style> ::= '"style" : ' "urban" | "other"
-				<floorHeight> ::= '"floorHeight" : '<int>
-				<decayDensity> ::= '"decayDensity" : '<int>
+				<resources> ::= '"resources"'[<s>] ":" [<s>] <string>
+				<style> ::= '"style"' [<s>] ":" [<s>] "urban" | "other"
+				<floorHeight> ::= '"floorHeight"' [<s>] ":" [<s>] <int>
+				<decayDensity> ::= '"decayDensity"' [<s>] ":" [<s>] <int>
 
-		<vars> ::= '"vars" : '  "{" ({ <var> "," } <var> ) | [<var>] "}"
-			<var> ::= <nbFloors>
+		<vars> ::= '"vars"'[<s>] ":" [<s>]  "{" ({ <var> [<s>] "," [<s>] } <var> ) | [<var>] "}"
+			<var> ::= <nbFloors> | <random>
 
-				<nbFloors> ::= '"nbFloors" : '<expression>
+				<nbFloors> ::= '"nbFloors"' [<s>] ":" [<s>] <expression>
+					<expression> ::= <value> <operator> <value>
+						<operator> ::= "mod" | "*" | "+" | "-" | "/"
 
-					<expression> ::= <> <operator> <>
 
-		<layers> ::= '"layers" : ' "[" ({ <layer> "," } <layer> ) | [<layer>] "]"
+		<layers> ::= '"layers"' [<s>] ":" [<s>] "[" [<s>] ({ <layer> [<s>] "," [<s>]} <layer> ) | [<layer>] "]"
 
-			<layer> ::= "{" <use> ["," <repeat> ["," <other-param>]] "}"
+			<layer> ::= "{" [<s>] <use> [<s>][","[<s>] <repeat> [<s>]["," [<s>]<otherParams>]] [<s>] "}"
 				
-				<use> ::= '"use" : '<string>
-				<repeat> ::= '"repeat" : ' <repeatExpr>
-					<repeatExpr> ::= 
-				<other-param> ::=
+				<use> ::= '"use"'[<s>] ":" [<s>] <string>
+				<repeat> ::= '"repeat"' [<s>] ":" [<s>] <repeatExpr>
+					<repeatExpr> ::= '"' [<s>] <value> [<s>] <value> [<s>] <sign> <value> '"'
+						<sign> ::= "<" | ">"
+
+				<otherParams> ::= ({ <otherParam> [<s>] "," [<s>]} <otherParam> ) | [<otherParam>]
+					<otherParam> ::= <pHeight> | <y>
+						<pHeight> ::=  '"height"'[<s>] ":" [<s>] <value>
+						<y> :: = '"y"'[<s>] ":" [<s>] (<value> | <expression>)
+				
+
+		<fill> ::= '"fill"' [<s>] ":" [<s>] "{" [<s>] <type>  [<s>] "," [<s>] <value>  [<s>] "}"
+
+			<type> ::= '"type"' [<s>] ":" [<s>] "color" | "image"
+			<value> ::= '"value"' [<s>]":" [<s>] <string>
 
 
-		<fill> ::= '"fill" : '"{" <type> "," <value> "}"
-
-			<type> ::= '"type" : ' "color" | "texture"
-			<value> ::= '"value" : ' <string>
-
-
-<s> (separator)
+<separator> ::= <space> | <tab> | <lineFeed>
+<s> ::= <separator> | <separator> <separator>
+<value> ::=  <int> | "@"<letter> | "@"<param> ??
