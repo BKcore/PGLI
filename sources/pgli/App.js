@@ -12,6 +12,7 @@ pgli.App = gamecore.Base.extend("App",
 	diagram: null,
 	preview: null,
 	nodeCount: 0,
+	console: null,
 
 	init: function(domDiagram, domModuleList, domEditor, domPreview)
 	{
@@ -28,7 +29,22 @@ pgli.App = gamecore.Base.extend("App",
 
 		this.preview = new pgli.render.CanvasRenderer(domPreview);
 
+		this.console = $('#console-text');
+
 		this.bindEvents();
+
+		window.console.log = function(args)
+		{
+			console.warn(arguments);
+			for(var i=0, len=arguments.length; i<len; ++i)
+			{
+				console.warn(self.console, self.console[0]);
+				self.console.append(arguments[i].toString()+"\n");
+				self.console.scrollTop(
+			        self.console[0].scrollHeight - self.console.height()
+			    );
+			};
+		}
 	},
 
 	bindEvents: function()

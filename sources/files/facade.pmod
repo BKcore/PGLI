@@ -11,7 +11,7 @@
 	"origin": "bottom left",
 
 	"params" : {
-		"resources": "~/PGLI/resources",
+		"resources": "http://127.0.0.1:8000/resources",
 		"style": "urban",
 		"floorheight": 200,
 		"decaydensity": 10,

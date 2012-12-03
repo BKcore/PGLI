@@ -3,12 +3,12 @@
 	"desc": "Wall template example",
 
 	"vars": {
-		"random": "#random(0,10)"
+		"random": "#random(1,5)"
 	},
 
 	"fill": {
 		"type": "image",
-		"value": "@resources/walls/@style/@random.jpg",
-		"repeat": "xy"
+		"value": "@resources/wall/@style/@random.jpg",
+		"repeat": "fit"
 	}
 }

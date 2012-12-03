@@ -15,6 +15,12 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 		'width': 3,
 		'height': 4,
 		'scale': 0
+	},
+	REPEAT_TYPES: {
+		'none': 'no-repeat',
+		'x': 'repeat-x',
+		'y': 'repeat-y',
+		'xy': 'repeat'
 	}
 
 },
@@ -59,12 +65,18 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 		if(!this.project)
 			return;
 
+		this.context.clearRect(0, 0, this.width, this.height);
+
 		var ratio = this.getRenderRatio();
+		var root = this.project.getRootModule();
+		var w = root.width*ratio;
+		var h = root.height*ratio;
+		var x = Math.round((this.width - w)/2);
+		var y = Math.round((this.height - h)/2);
 
 		this.sreset();
-		this.xreset(ratio, 0, 0, this.width, this.height);
-		console.log(this.xget());
-		this.walkModule(this.project.getRootModule());
+		this.xreset(ratio, x, y, w, h);
+		this.walkModule(root);
 	},
 
 	walkModule: function(module)
@@ -73,7 +85,7 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 
 		var static = pgli.render.CanvasRenderer;
 
-		console.log("render: "+module.name);
+		console.log("#Render: "+module.name);
 
 		if("params" in module) for(p in module.params)
 			this.sset(p, module.params[p]);
@@ -127,14 +139,28 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 
 	actionFill: function(opts)
 	{
+		var static = pgli.render.CanvasRenderer;
+
 		if(opts.type == "image")
 		{
-			this.context.drawImage(
-				this.loadImage(
+			var image = this.loadImage(
 					pgli.lang.Parser.parseExpression(opts.value, this.sget())
-				)
-				, this.xgetw(), this.xgeth()
-			);
+				);
+
+			if("repeat" in opts && opts.repeat in static.REPEAT_TYPES)
+			{
+				var pattern = this.context.createPattern(image, static.REPEAT_TYPES[opts.repeat]);
+
+				this.context.rect(this.xgetx(), this.xgety(), this.xgetw(), this.xgeth());
+				this.context.fillStyle = pattern;
+				this.context.fill();
+
+				//pattern = null;
+			}
+			else
+			{
+				this.context.drawImage(image, this.xgetx(), this.xgety(), this.xgetw(), this.xgeth());
+			}
 		}
 		if(opts.type == "color")
 		{
@@ -148,7 +174,9 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	loadImage: function(url)
 	{
 		if(url in this.resources.images)
+		{
 			return this.resources.images[url];
+		}
 		else
 		{
 			var img = new Image();
@@ -200,8 +228,6 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 			this.xform.push([ratio, x, y, h, w]);
 		
 		this.xseek++;
-
-		console.log("xpush: "+this.xget());
 	},
 
 	xpop: function()
@@ -265,13 +291,17 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 
 	resize: function()
 	{
-		this.width = this.container.width();
-		this.height = this.container.height();
+		var w = this.container.width();
+		var h = this.container.height();
 
-		var size = 0.9*this.width;
+		var size = 0.9*Math.min(w, h);
+		this.width = size;
+		this.height = size;
 		var $canvas = $(this.canvas);
 		$canvas.width(size);
 		$canvas.height(size);
+		this.canvas.width = size;
+		this.canvas.height = size;
 		$canvas.css('marginTop', this.container.height() / 2 - size / 2);
 		$canvas.css('marginLeft', this.container.width() / 2 - size / 2);
 
