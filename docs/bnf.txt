@@ -1,69 +1,76 @@
-
+                                                                                                                
 <document> ::= "{" <s> (({ <docelement> <listsep> } <docelement>) | [<docelement>]) <s> "}"
-	
-	<docelement> ::= <attribute> | <params> | <vars> | <layers> | <fill> 
-			
-		<attribute> ::= <name> | <desc> | <width> | <height> | <origin>
 
-			<name> ::= '"name"' <attrsep> <string>
-			<desc> ::= '"desc"' <attrsep> <string>
-			<width> ::= '"width"' <attrsep> <int>
-			<height> ::= '"height"' <attrsep> <int>
-			<origin> ::= '"origin"' <attrsep> ("bottom left" | "top left" | "center" | "bottom right" | "top right" | "inherit")
+<docelement> ::= <attribute> | <params> | <vars> | <layers> | <fill> 
 
+<attribute> ::= <name> | <desc> | <width> | <height> | <origin>
 
-		<params> ::= '"params"' <attrsep> "{" <s> (({ <param> <listsep> } <param>) | [<param>]) <s> "}"
-			
-			<param>::= <string> <attrsep> (<string> | <number>)
+<name> ::= '"name"' <attrsep> <string>
+<desc> ::= '"desc"' <attrsep> <string>
+<width> ::= '"width"' <attrsep> <int>
+<height> ::= '"height"' <attrsep> <int>
+<origin> ::= '"origin"' <attrsep> ("bottom left" | "top left" | "center" | "bottom right" | "top right" | "inherit")
 
 
-		<vars> ::= '"vars"' <attrsep> "{" <s> (({ <var> <listsep> } <var> ) | [<var>]) <s> "}"
-			
-			<var> ::= <string> <attrsep> (<expression> | <number>)
+<params> ::= '"params"' <attrsep> "{" <s> (({ <param> <listsep> } <param>) | [<param>]) <s> "}"
+
+<param>::= <string> <attrsep> (<string> | <number>)
 
 
-		<layers> ::= '"layers"' <attrsep> "[" <s> (({ <layer> <listsep> } <layer> ) | [<layer>]) <s> "]"
+<vars> ::= '"vars"' <attrsep> "{" <s> (({ <var> <listsep> } <var> ) | [<var>]) <s> "}"
 
-			<layer> ::= "{" <s> (({ <layerparam> <listsep> } <layerparam> ) | [<layerparam>]) <s> "}"
-				
-				<layerparam> ::= <layeruse> | <layerrepeat> | <var>
-
-					<layeruse> ::= '"use"' <attrsep> <pathexpr>
-
-					<layerrepeat> ::= '"repeat"' <attrsep> <repeatexpr>
-
-						<repeatexpr> ::= '"' <so> <exprvar> <so> <expritem> <so> <operatorrep> <so> <expritem> <so> '"'
+<var> ::= <string> <attrsep> (<expression> | <number>)
 
 
-		<fill> ::= '"fill"' <attrsep> "{" <s> <filltype> <listsep> <fillvalue> [<listsep> <fillrepeat>] <s> "}"
+<layers> ::= '"layers"' <attrsep> "[" <s> (({ <layer> <listsep> } <layer> ) | [<layer>]) <s> "]"
 
-			<filltype> ::= '"type"' <attrsep> ("color" | "image")
-			<fillvalue> ::= '"value"' <attrsep> <string>
-			<fillrepeat> ::= '"repeat"' <attrsep> ('exact' | 'fit' | 'cover' | 'x' | 'y' | 'xy' )
+<layer> ::= "{" <s> (({ <layerparam> <listsep> } <layerparam> ) | [<layerparam>]) <s> "}"
+
+<layerparam> ::= <layeruse> | <layerrepeat> | <var>
+
+<layeruse> ::= '"use"' <attrsep> <pathexpr>
+
+<layerrepeat> ::= '"repeat"' <attrsep> <repeatexpr>
+
+<repeatexpr> ::= '"' <so> <exprvar> <so> <expritem> <so> <operatorrep> <so> <expritem> <so> '"'
+
+
+<fill> ::= '"fill"' <attrsep> "{" <s> <filltype> <listsep> <fillvalue> [<listsep> <fillrepeat>] <s> "}"
+
+<filltype> ::= '"type"' <attrsep> ("color" | "image")
+<fillvalue> ::= '"value"' <attrsep> <string>
+<fillrepeat> ::= '"repeat"' <attrsep> ('exact' | 'fit' | 'cover' | 'x' | 'y' | 'xy' )
 
 
 <expression> ::= '"' (({ <expritem> <so> <operator> <so> } <expritem> ) | [<expritem>]) '"'
-	
-	<expritem> ::= <exprvar> | <exprfunc> | <number>
 
-		<exprvar> ::= '@' <word>
-		<exprfunc> ::= '#' <word> '(' (({ <exprfuncparam> <listsep> } <exprfuncparam>) | [<exprfuncparam>]) ')'
+<expritem> ::= <exprvar> | <exprfunc> | <number>
 
-			<exprfuncparam> ::= <exprvar> | <number>
+<exprvar> ::= '@' <word>
+<exprfunc> ::= '#' <word> '(' (({ <exprfuncparam> <listsep> } <exprfuncparam>) | [<exprfuncparam>]) ')'
+
+<exprfuncparam> ::= <exprvar> | <number>
 
 <pathexpr> ::= '"' (({ <pathexpritem> <pathsep> } <pathexpritem> ) | [<pathexpritem>]) '.pmod"'
 
-	<pathexpritem> ::= <word> | <exprvar> | <exprfunc> | '.' | '~' | <pathexpritem>
-	<pathsep> ::= '/' | '\\'
+<pathexpritem> ::= <word> | <exprvar> | <exprfunc> | '.' | '~' | <pathexpritem>
+<pathsep> ::= '/' | '\\'
 
 
-<string> ::= '"' <word> '"'
-<number> ::= <int> | <float>
+<word> ::= { 'A'-'Z' }
+
+<string> ::= '"' <substring> '"'
+<substring> ::= '\' <char> <substring>
+<substring> ::= <charsec> <substring>
+<charsec> ::= [^"\]
+
 <operator> ::= '+' | '-' | '*' | '/' | '%'
 <operatorrep> ::= '>' | '<' | '!=' | '<=' | '>='
 
+<number> ::= [ '+' | '-' ] { <digit> } [ '.' { <digit> } ] [ 'E'|'e' [ '+' | '-' ] { <digit> } ]
+<digit> ::= [0-9]
 
-<s> ::= { ' ' | '\n' | '\r\n' | '\t' }
+<s> ::= { <so> | '\n' | '\r' | '\t' | '\f' }
 <so> ::= { ' ' }
 <listsep> ::= <s> ',' <s>
 <attrsep> ::= <s> ':' <s>
