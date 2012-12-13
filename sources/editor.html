@@ -42,6 +42,7 @@
 <script src="pgli/App.js" type="text/javascript" charset="utf-8"></script>
 <script src="pgli/Project.js" type="text/javascript" charset="utf-8"></script>
 <script src="pgli/lang/Parser.js" type="text/javascript" charset="utf-8"></script>
+<script src="pgli/lang/Iterator.js" type="text/javascript" charset="utf-8"></script>
 <script src="pgli/ui/ModuleList.js" type="text/javascript" charset="utf-8"></script>
 <script src="pgli/diagram/Diagram.js" type="text/javascript" charset="utf-8"></script>
 <script src="pgli/diagram/Links.js" type="text/javascript" charset="utf-8"></script>
@@ -60,7 +61,7 @@
 		});*/
 
 		var app = new pgli.App("diagram", "modules", "editor", "preview");
-		app.bindProject(new pgli.Project("files/facade.pmod", function(){ app.draw(); }));
+		//app.bindProject(new pgli.Project("files/facade.pmod", function(){ app.draw(); }));
 		window.app = app;
   }); 
 </script>

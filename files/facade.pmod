@@ -14,7 +14,7 @@
 		"resources": "http://127.0.0.1:8000/resources",
 		"style": "urban",
 		"floorheight": 200,
-		"decaydensity": 10,
+		"decaydensity": 6,
 		"width": 1000,
 		"height": 2000
 	},

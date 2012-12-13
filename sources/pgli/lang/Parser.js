@@ -50,6 +50,26 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 
 	},
 
+	parseRepeat: function(string, scope)
+	{
+		var items = string.split(" ");
+
+		if(items.length != 4)
+			throw "Syntax error in repeat expression";
+
+			console.warn(items[0].substr(1))
+			console.warn(Number(this.parseExpression(items[1], scope)))
+			console.warn(items[2])
+			console.warn(Number(this.parseExpression(items[3], scope)))
+
+		return new pgli.lang.Iterator(
+			items[0].substr(1),
+			Number(this.parseExpression(items[1], scope)),
+			items[2],
+			Number(this.parseExpression(items[3], scope))
+		);
+	},
+
 	parseModule: function(string)
 	{
 		try

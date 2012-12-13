@@ -33,12 +33,11 @@ pgli.App = gamecore.Base.extend("App",
 
 		this.bindEvents();
 
-		window.console.log = function(args)
+		window.trace = function(args)
 		{
-			console.warn(arguments);
 			for(var i=0, len=arguments.length; i<len; ++i)
 			{
-				console.warn(self.console, self.console[0]);
+				console.log(arguments[i] );
 				self.console.append(arguments[i].toString()+"\n");
 				self.console.scrollTop(
 			        self.console[0].scrollHeight - self.console.height()
@@ -131,7 +130,7 @@ pgli.App = gamecore.Base.extend("App",
 
 	onDropEvent: function(e)
 	{
-		console.log("dropev");
+		trace("#Parsing dropped file(s)...");
 		e.preventDefault();
 		var self = this;
 
@@ -139,11 +138,21 @@ pgli.App = gamecore.Base.extend("App",
 		for (var i = 0; i < length; i++) 
 		{
 			var file = e.originalEvent.dataTransfer.files[i];
+			console.log(file);
 
 			fileName = file.name;
-			console.log(fileName)
 
-			this.project.loadFile(self.project.path+fileName,fileName,true,true);
+			if(i == 0 && this.project == null)
+			{
+				var path = window.prompt("Please prove project's root path (with trailing slash).", "../files/");
+				trace("#Opening new project from ["+fileName+"]...");
+				this.bindProject(new pgli.Project(path+fileName, function(){ 
+					self.draw(); 
+					self.showInEditor(self.project.root);
+				}));
+			}
+			else
+				this.project.loadFile(self.project.path+fileName,fileName,true,true);
 
 		}
 

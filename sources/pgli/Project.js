@@ -39,6 +39,7 @@ pgli.Project = gamecore.Base.extend('Project',
 
 	loadFile: function(path,name,doDependencies,doDiagram)
 	{
+		trace("#Loading ["+name+"].");
 		var self = this;
 		var request = $.ajax({
 	            url: path,
@@ -59,6 +60,7 @@ pgli.Project = gamecore.Base.extend('Project',
 		    	if(doDiagram == true)
 		    		self.getAppInstance().addDiagramNode(name, object);
 
+		    	trace("#["+name+"] loaded");
 		  
 		        self.onLoad();
 		    })
@@ -83,6 +85,8 @@ pgli.Project = gamecore.Base.extend('Project',
 				continue;
 
 			var layerName = layers[i].use;
+
+			trace("#Found dependency ["+layerName+"]");
 
 	    	(function(name,self)
 	    	{

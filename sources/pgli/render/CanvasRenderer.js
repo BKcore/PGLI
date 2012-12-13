@@ -63,7 +63,11 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	draw: function()
 	{
 		if(!this.project)
+		{
+			trace("#Render failed: No project loaded");
 			return;
+		}
+		trace("#Starting renderer...");
 
 		this.context.clearRect(0, 0, this.width, this.height);
 
@@ -83,9 +87,7 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	{
 		if(!module) return;
 
-		var static = pgli.render.CanvasRenderer;
-
-		console.log("#Render: "+module.name);
+		trace("#Render: "+module.name);
 
 		if("params" in module) for(p in module.params)
 			this.sset(p, module.params[p]);
@@ -101,26 +103,70 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 			var layer = module.layers[i];
 			if("use" in layer)
 			{
-				this.xpush();
-				this.spush();
-
-				var scope = this.sget();
-				for(k in layer)
+				if("repeat" in layer)
 				{
-					if(k in static.SCOPE_KEYWORDS)
-						continue;
-					else if(k in static.SCOPE_XFORMS)
-						this.xset(static.SCOPE_XFORMS[k], pgli.lang.Parser.parseExpression(layer[k], scope));
-					else
-						this.sset(k, pgli.lang.Parser.parseExpression(layer[k], scope));
-				}
+					var iterator;
 
-				this.walkModule(this.project.getModule(layer.use));
-				
-				this.spop();
-				this.xpop();
+					try {
+						iterator = pgli.lang.Parser.parseRepeat(layer.repeat, this.sget());
+						trace("#  Found repeat layer ["+iterator.varname+" from "+iterator.start+" to "+iterator.end+"]");
+					} catch(e) {
+						trace("(!) Syntax error in repeat expression ["+layer.repeat+"]");
+						console.warn(e.message, e.stack[0]);
+						continue;
+					}
+					
+					while(iterator.loop())
+					{
+						this.sset(iterator.varname, iterator.step);
+						this.walkLayer(layer);
+						iterator.next();
+					}
+				}
+				else
+				{
+					this.walkLayer(layer);
+				}
 			}
 		}
+	},
+
+	walkLayer: function(layer)
+	{
+		var static = pgli.render.CanvasRenderer;
+
+		this.xpush();
+		this.spush();
+
+		var scope = this.sget();
+		for(k in layer)
+		{
+			if(k in static.SCOPE_KEYWORDS)
+				continue;
+			else if(k in static.SCOPE_XFORMS)
+			{
+				var val = pgli.lang.Parser.parseExpression(layer[k], scope);
+				if(typeof(val) == "number")
+				{
+					val = Number(val)*this.xgetr();
+				}
+				else
+				{
+					var p = val.search("%");
+					if(p > 0)
+						val = (Number(val.substr(O, p))/100)*this.xget()[static.SCOPE_XFORMS[k]];
+					else continue;
+				}
+				this.xset(static.SCOPE_XFORMS[k], val);
+			}
+			else
+				this.sset(k, pgli.lang.Parser.parseExpression(layer[k], scope));
+		}
+
+		this.walkModule(this.project.getModule(layer.use));
+		
+		this.spop();
+		this.xpop();
 	},
 
 	actionVars: function(opts)
@@ -141,8 +187,11 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	{
 		var static = pgli.render.CanvasRenderer;
 
+		console.warn(opts);
+
 		if(opts.type == "image")
 		{
+			trace("#  Fill(image)...")
 			var image = this.loadImage(
 					pgli.lang.Parser.parseExpression(opts.value, this.sget())
 				);
@@ -162,26 +211,39 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 				this.context.drawImage(image, this.xgetx(), this.xgety(), this.xgetw(), this.xgeth());
 			}
 		}
-		if(opts.type == "color")
+		else if(opts.type == "color")
 		{
+			trace("#  Fill(color)...")
 			this.context.beginPath();
 			this.context.rect(this.xgetx(), this.xgety(), this.xgetw(), this.xgeth());
 			this.context.fillStyle = pgli.lang.Parser.parseExpression(opts.value);
 			this.context.fill();
 		}
+		else if(opts.type == "line")
+		{
+			trace("#  Fill(line)...")
+			this.context.beginPath();
+			this.context.rect(this.xgetx(), this.xgety(), this.xgetw(), this.xgeth());
+			this.context.lineWidth = 1;
+			this.context.strokeStyle = pgli.lang.Parser.parseExpression(opts.value);
+			this.context.stroke();
+		}
 	},
 
 	loadImage: function(url)
 	{
+		var self = this;
 		if(url in this.resources.images)
 		{
 			return this.resources.images[url];
 		}
 		else
 		{
+			trace("/!\\ Image is loading, will redraw onload.");
 			var img = new Image();
-			img.onLoad = function(){
-				//self.draw();
+			img.onload = function(){
+				trace("#Image loaded, redrawing...");
+				self.draw();
 			};
 			img.src = url;
 			this.resources.images[url] = img;

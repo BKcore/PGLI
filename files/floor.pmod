@@ -10,7 +10,12 @@
 
 	"origin": "bottom left",
 
-	"params" : {
+	"params": {
 		"style": "urban"
+	},
+
+	"fill": {
+		"type": "line",
+		"value": "#00FF00"
 	}
 }
