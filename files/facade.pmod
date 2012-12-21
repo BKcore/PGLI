@@ -15,12 +15,12 @@
 		"style": "urban",
 		"floorheight": 200,
 		"decaydensity": 6,
-		"width": 1000,
-		"height": 2000
+		"g_width": 1000,
+		"g_height": 2000
 	},
 
 	"vars" : {
-		"nbfloors": "#mod(@height, @floorheight)"
+		"nbfloors": "#mod(@g_height, @floorheight)"
 	},
 
 	"layers": [

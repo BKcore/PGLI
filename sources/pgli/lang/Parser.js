@@ -3,24 +3,30 @@ pgli.lang = pgli.lang || {};
 
 pgli.lang.Parser = gamecore.Base.extend('Parser',
 {
-	TYPE: {
-		NONE: -1,
-		ARITH: 0,
-		NUM: 1,
-		VARIABLE: 2,
-		METHOD: 3
+
+	xStruct: {
+		"scale": 0,
+		"x": 1,
+		"y": 2,
+		"width": 3,
+		"height": 4
 	},
 
 
 	patternVar:/\@(\w+)/g,
 	patternMethod: /\#(\w+)(\(([^\)]+)\))/g,
 
+	debug: 1,
 
 
-	parseExpression: function(string, scope)
+	parseExpression: function(string, scope, xform)
 	{
+		static = pgli.lang.Parser;
+
 		var self = this;
 		var orig = string;
+		var s = (scope !== null && typeof(scope) !== "undefined")
+		var x = (xform !== null && typeof(xform) !== "undefined" && xform.length > 0)
 
 		if(typeof(string) != "string")
 			return string;
@@ -29,17 +35,22 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 		{
 			string = string.replace(this.patternVar,function(match,varName)
 			{
-				return varName in scope ? scope[varName] : 0;
+				if(x && varName in static.xStruct)
+					return xform[static.xStruct[varName]];
+				else if(s && varName in scope)
+					return scope[varName]
+				else
+					return 0
 			});
 		}
 
 		string = string.replace(this.patternMethod,function(match,methodName,a,params)
 		{
-			console.log(arguments);
+			if(self.debug < 2) console.log(arguments);
 			return self.execFunction(methodName, params);
 		});
 
-		console.log("#Parsed expr: '"+string+"' from '"+orig+"'");
+		if(self.debug < 2) console.log("#Parsed expr: '"+string+"' from '"+orig+"'");
 		
 		try {
 			return eval(string);
@@ -57,10 +68,10 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 		if(items.length != 4)
 			throw "Syntax error in repeat expression";
 
-			console.warn(items[0].substr(1))
-			console.warn(Number(this.parseExpression(items[1], scope)))
-			console.warn(items[2])
-			console.warn(Number(this.parseExpression(items[3], scope)))
+		if(self.debug < 2) console.warn(items[0].substr(1))
+		if(self.debug < 2) console.warn(Number(this.parseExpression(items[1], scope)))
+		if(self.debug < 2) console.warn(items[2])
+		if(self.debug < 2) console.warn(Number(this.parseExpression(items[3], scope)))
 
 		return new pgli.lang.Iterator(
 			items[0].substr(1),

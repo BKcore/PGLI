@@ -62,6 +62,8 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 
 	draw: function()
 	{
+		clearTrace();
+
 		if(!this.project)
 		{
 			trace("#Render failed: No project loaded");
@@ -112,7 +114,6 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 						trace("#  Found repeat layer ["+iterator.varname+" from "+iterator.start+" to "+iterator.end+"]");
 					} catch(e) {
 						trace("(!) Syntax error in repeat expression ["+layer.repeat+"]");
-						console.warn(e.message, e.stack[0]);
 						continue;
 					}
 					
@@ -138,14 +139,13 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 		this.xpush();
 		this.spush();
 
-		var scope = this.sget();
 		for(k in layer)
 		{
 			if(k in static.SCOPE_KEYWORDS)
 				continue;
 			else if(k in static.SCOPE_XFORMS)
 			{
-				var val = pgli.lang.Parser.parseExpression(layer[k], scope);
+				var val = pgli.lang.Parser.parseExpression(layer[k], this.sget(), this.xget());
 				if(typeof(val) == "number")
 				{
 					val = Number(val)*this.xgetr();
@@ -157,10 +157,14 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 						val = (Number(val.substr(O, p))/100)*this.xget()[static.SCOPE_XFORMS[k]];
 					else continue;
 				}
+				if(k == "x" || k == "y")
+				{
+					val += this.xget()[static.SCOPE_XFORMS[k]];
+				}
 				this.xset(static.SCOPE_XFORMS[k], val);
 			}
 			else
-				this.sset(k, pgli.lang.Parser.parseExpression(layer[k], scope));
+				this.sset(k, pgli.lang.Parser.parseExpression(layer[k], this.sget()), this.xget());
 		}
 
 		this.walkModule(this.project.getModule(layer.use));
@@ -172,14 +176,13 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	actionVars: function(opts)
 	{
 		var static = pgli.render.CanvasRenderer;
-		var scope = this.sget();
 
 		for(k in opts)
 		{
 			if(k in static.SCOPE_KEYWORDS || k in static.SCOPE_XFORMS)
 				continue;
 			else
-				this.sset(k, pgli.lang.Parser.parseExpression(opts[k], scope));
+				this.sset(k, pgli.lang.Parser.parseExpression(opts[k], this.sget(), this.xget()));
 		}
 	},
 
@@ -187,13 +190,11 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 	{
 		var static = pgli.render.CanvasRenderer;
 
-		console.warn(opts);
-
 		if(opts.type == "image")
 		{
-			trace("#  Fill(image)...")
+			//trace("#  Fill(image)...")
 			var image = this.loadImage(
-					pgli.lang.Parser.parseExpression(opts.value, this.sget())
+					pgli.lang.Parser.parseExpression(opts.value, this.sget(), this.xget())
 				);
 
 			if("repeat" in opts && opts.repeat in static.REPEAT_TYPES)
@@ -213,19 +214,19 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 		}
 		else if(opts.type == "color")
 		{
-			trace("#  Fill(color)...")
+			//trace("#  Fill(color)...")
 			this.context.beginPath();
 			this.context.rect(this.xgetx(), this.xgety(), this.xgetw(), this.xgeth());
-			this.context.fillStyle = pgli.lang.Parser.parseExpression(opts.value);
+			this.context.fillStyle = pgli.lang.Parser.parseExpression(opts.value, this.sget(), this.xget());
 			this.context.fill();
 		}
 		else if(opts.type == "line")
 		{
-			trace("#  Fill(line)...")
+			//trace("#  Fill(line)...")
 			this.context.beginPath();
 			this.context.rect(this.xgetx(), this.xgety(), this.xgetw(), this.xgeth());
 			this.context.lineWidth = 1;
-			this.context.strokeStyle = pgli.lang.Parser.parseExpression(opts.value);
+			this.context.strokeStyle = pgli.lang.Parser.parseExpression(opts.value, this.sget(), this.xget());
 			this.context.stroke();
 		}
 	},
@@ -285,7 +286,7 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 			if(this.xseek == -1)
 				this.xform.push([1.0, 0, 0, this.width, this.height]);
 			else
-				this.xform.push(this.xget())
+				this.xform.push(this.xget().slice(0))
 		else
 			this.xform.push([ratio, x, y, h, w]);
 		

@@ -13,6 +13,7 @@ pgli.App = gamecore.Base.extend("App",
 	preview: null,
 	nodeCount: 0,
 	console: null,
+	debug: 2, // 0:none, 1:inapp, 2:console, 3:both
 
 	init: function(domDiagram, domModuleList, domEditor, domPreview)
 	{
@@ -33,16 +34,25 @@ pgli.App = gamecore.Base.extend("App",
 
 		this.bindEvents();
 
+		pgli.lang.Parser.debug = self.debug;
+
 		window.trace = function(args)
 		{
+			if(!self.debug) return;
 			for(var i=0, len=arguments.length; i<len; ++i)
 			{
-				console.log(arguments[i] );
+				if(self.debug < 2) console.log(arguments[i]);
+				if(self.debug == 1 || self.debug == 3) return;
 				self.console.append(arguments[i].toString()+"\n");
 				self.console.scrollTop(
 			        self.console[0].scrollHeight - self.console.height()
 			    );
 			};
+		}
+
+		window.clearTrace = function()
+		{
+			self.console.text("");
 		}
 	},
 
@@ -95,6 +105,26 @@ pgli.App = gamecore.Base.extend("App",
 		this.preview.resize();
 	},
 
+	saveModule: function()
+	{
+		$.ajax({
+			url:"/",
+			type:"POST",
+			data: JSON.stringify({"a":1,"b":"toto"}),
+    		contentType: "application/json; charset=utf-8",
+    		dataType: "json",
+			success:function(a)
+			{
+				console.log("AJAX POST OK: ", a);
+			},
+			error: function(a)
+			{
+				console.log("AJAX POST ERROR: ", a);
+			}
+		});
+		console.log("STARTED AJAX REQUEST");
+	},
+
 	onKeyDown: function(e)
 	{
 		if(e.keyCode==117)
@@ -106,6 +136,12 @@ pgli.App = gamecore.Base.extend("App",
 		else if(e.keyCode==118)
 		{
 			this.preview.draw();
+			e.preventDefault();
+			return false;
+		}
+		else if(e.keyCode==119)
+		{
+			this.saveModule();
 			e.preventDefault();
 			return false;
 		}	
