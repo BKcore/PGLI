@@ -21,17 +21,20 @@ http.createServer(function(req, res) {
 	      
 	    req.on('data', function(chunk) {
 	      console.log("Received body data:");
-	      console.log(chunk.toString());
 	      data += chunk;
+	      var jsonFile = JSON.parse(data);
+	      fs = require('fs');
+		  fs.writeFile(jsonFile.file, JSON.stringify(jsonFile.obj ,null, 4), function (err) {
+			  if (err) return console.log(err);
+			  console.log('ok');
+			  });
 	    });
 
 	    req.on('end', function() {
 	      // empty 200 OK response for now
 	      res.writeHead(200, "OK", {'Content-Type': 'text/html'});
 	      console.log("received");
-	      console.log(data);
-	      console.log(JSON.parse(data));
-	      res.write("PROUT");
+	      res.write("END");
 	      res.end();
 	    });
 	}

@@ -107,12 +107,18 @@ pgli.App = gamecore.Base.extend("App",
 
 	saveModule: function()
 	{
-		$.ajax({
+		for(var i=0; i<this.project.keys.length;i++)
+		{
+			var name = this.project.keys[i]
+			var fileToSave = this.project.getModule(name);
+			var jsonData = {file :'files/'+name ,obj: fileToSave};
+
+			$.ajax({
 			url:"/",
 			type:"POST",
-			data: JSON.stringify({"a":1,"b":"toto"}),
+			data: JSON.stringify(jsonData),
     		contentType: "application/json; charset=utf-8",
-    		dataType: "json",
+    		dataType: "text",
 			success:function(a)
 			{
 				console.log("AJAX POST OK: ", a);
@@ -121,8 +127,11 @@ pgli.App = gamecore.Base.extend("App",
 			{
 				console.log("AJAX POST ERROR: ", a);
 			}
-		});
-		console.log("STARTED AJAX REQUEST");
+			});
+			
+			console.log("STARTED AJAX REQUEST");
+		}
+		
 	},
 
 	onKeyDown: function(e)
