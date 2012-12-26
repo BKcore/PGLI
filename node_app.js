@@ -2,6 +2,7 @@ var static = require('node-static'),
   http = require('http'),
   util = require('util'),
   url = require("url");
+  fs = require('fs');
 
 var webroot = './',
   port = 8080;
@@ -23,7 +24,6 @@ http.createServer(function(req, res) {
 	      console.log("Received body data:");
 	      data += chunk;
 	      var jsonFile = JSON.parse(data);
-	      fs = require('fs');
 		  fs.writeFile(jsonFile.file, JSON.stringify(jsonFile.obj ,null, 4), function (err) {
 			  if (err) return console.log(err);
 			  console.log('ok');
