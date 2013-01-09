@@ -37,7 +37,7 @@
 
 <fill> ::= '"fill"' <attrsep> "{" <s> <filltype> <listsep> <fillvalue> [<listsep> <fillrepeat>] <s> "}"
 
-<filltype> ::= '"type"' <attrsep> ("color" | "image")
+<filltype> ::= '"type"' <attrsep> ("color" | "image" | "line")
 <fillvalue> ::= '"value"' <attrsep> <string>
 <fillrepeat> ::= '"repeat"' <attrsep> ('exact' | 'fit' | 'cover' | 'x' | 'y' | 'xy' )
 
@@ -57,7 +57,7 @@
 <pathsep> ::= '/' | '\\'
 
 
-<word> ::= { 'A'-'Z' }
+<word> ::= [A-Za-z0-9 _-]
 
 <string> ::= '"' <substring> '"'
 <substring> ::= '\' <char> <substring>
