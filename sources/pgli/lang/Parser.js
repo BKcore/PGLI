@@ -89,7 +89,7 @@ pgli.lang.Parser = gamecore.Base.extend('Parser',
 		}
 		catch(e)
 		{
-			console.warn("module syntax error : "+ string);
+			trace("(!) Syntax error in module.");
 			return {error:"unable to parse module"};
 		}
 	},

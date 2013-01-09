@@ -41,6 +41,7 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 		images: []
 	},
 	variables: null,
+	isFS: false,
 
 	/**
 	 * Bind a new renderer to given canvas
@@ -58,6 +59,32 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 		this.resize();
 
 		this.variables = new gamecore.Hashtable();
+	},
+
+	fullscreen: function()
+	{
+		this.isFS = !this.isFS;
+		if(this.isFS)
+		{
+			this.container.parent().css({
+				'width': '100%'
+			});
+			this.container.css({
+				'bottom': 0,
+				'width': '99%'
+			});
+		}
+		else
+		{
+			this.container.parent().css({
+				'width': '400px'
+			});
+			this.container.css({
+				'bottom': '50%',
+				'width': '396px'
+			});
+		}
+		this.resize();
 	},
 
 	draw: function()
@@ -357,16 +384,15 @@ pgli.render.CanvasRenderer = gamecore.Base.extend('CanvasRenderer',
 		var w = this.container.width();
 		var h = this.container.height();
 
-		var size = 0.9*Math.min(w, h);
-		this.width = size;
-		this.height = size;
+		this.width = 0.9*w;
+		this.height = 0.9*h;
 		var $canvas = $(this.canvas);
-		$canvas.width(size);
-		$canvas.height(size);
-		this.canvas.width = size;
-		this.canvas.height = size;
-		$canvas.css('marginTop', this.container.height() / 2 - size / 2);
-		$canvas.css('marginLeft', this.container.width() / 2 - size / 2);
+		$canvas.width(this.width);
+		$canvas.height(this.height);
+		this.canvas.width = this.width;
+		this.canvas.height = this.height;
+		$canvas.css('marginLeft', this.container.width() / 2 - this.width / 2);
+		$canvas.css('marginTop', this.container.height() / 2 - this.height / 2);
 
 		this.context = this.canvas.getContext("2d");
 

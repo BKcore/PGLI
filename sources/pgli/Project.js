@@ -14,6 +14,7 @@ pgli.Project = gamecore.Base.extend('Project',
 	activeFile: null,
 	files:null,
 	keys :[],
+	processed: [],
 	name: "default",
 	path: "/files/",
 	root: "default.pmod",
@@ -40,6 +41,8 @@ pgli.Project = gamecore.Base.extend('Project',
 	loadFile: function(path,name,doDependencies,doDiagram)
 	{
 		trace("#Loading ["+name+"].");
+		this.processed.push(name);
+
 		var self = this;
 		var request = $.ajax({
 	            url: path,
@@ -86,7 +89,10 @@ pgli.Project = gamecore.Base.extend('Project',
 
 			var layerName = layers[i].use;
 
-			trace("#Found dependency ["+layerName+"]");
+			if(self.processed.indexOf(layerName) > -1)
+				continue;
+
+			trace("#Found new dependency ["+layerName+"]");
 
 	    	(function(name,self)
 	    	{

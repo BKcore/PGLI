@@ -107,6 +107,8 @@ pgli.App = gamecore.Base.extend("App",
 
 	saveModule: function()
 	{
+
+		trace('#Saving project...');
 		for(var i=0; i<this.project.keys.length;i++)
 		{
 			var name = this.project.keys[i]
@@ -122,10 +124,12 @@ pgli.App = gamecore.Base.extend("App",
 			success:function(a)
 			{
 				console.log("AJAX POST OK: ", a);
+				trace("#File saved.");
 			},
 			error: function(a)
 			{
 				console.log("AJAX POST ERROR: ", a);
+				trace("(!) Error while trying to save file.");
 			}
 			});
 			
@@ -154,6 +158,12 @@ pgli.App = gamecore.Base.extend("App",
 			e.preventDefault();
 			return false;
 		}	
+		else if(e.keyCode==120)
+		{
+			this.preview.fullscreen();
+			e.preventDefault();
+			return false;
+		}
 	},
 
 	updateDiagram:function()
