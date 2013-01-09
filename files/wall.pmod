@@ -2,7 +2,7 @@
     "name": "Wall",
     "desc": "Wall template example",
     "vars": {
-        "random": "#random(1,5)"
+        "random": "#random(1,4)"
     },
     "fill": {
         "type": "image",
